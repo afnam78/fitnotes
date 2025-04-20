@@ -9,22 +9,24 @@ use Livewire\Component;
 
 class Register extends Component
 {
-    public Exercise $selectedExercise;
+    public ?Exercise $selectedExercise = null;
+    public ?Workout $selectedWorkout = null;
+
     public Collection $workouts;
     public ?int $selectedWorkoutId = null;
+    public ?int $selectedExerciseId = null;
     public Collection $exercises;
+    public string $exerciseDate;
+
+    public string $title;
+
+    public int $step = 1;
 
     protected array $rules = [
-        'selectedExercise' => 'required|exists:exercises,id',
-        'selectedWorkout' => 'required|exists:workouts,id',
+        'exerciseDate' => 'required|date',
+        'selectedExerciseId' => 'required|exists:exercises,id',
+        'selectedWorkoutId' => 'required|exists:workouts,id',
     ];
-
-    public function updated($key, $value)
-    {
-        if ($key === 'selectedWorkoutId') {
-            $this->exercises = Workout::find($value)->load('exercises')->exercises;
-        }
-    }
 
     public function render()
     {
@@ -35,5 +37,54 @@ class Register extends Component
     {
         $this->exerciseDate = $date ?? now()->format('Y-m-d');
         $this->workouts = auth()->user()->workouts;
+        $this->exercises = collect();
+        $this->title = 'Seleccionar entrenamiento';
+    }
+
+    public function nextStep(): void
+    {
+        if($this->step === 1) {
+            $this->stepOne();
+        }
+
+        if ($this->step === 2)
+        {
+            $this->stepTwo();
+        }
+
+        $this->step++;
+    }
+
+    public function create()
+    {
+
+    }
+
+    private function stepOne():void
+    {
+        $this->validate([
+            'selectedWorkoutId' => 'required|exists:workouts,id',
+            'exerciseDate' => 'required|date',
+        ]);
+        $this->selectedWorkout = Workout::find($this->selectedWorkoutId);
+        $this->exercises = $this->selectedWorkout->load('exercises')->exercises;
+        $this->title = sprintf(
+            '%s',
+            $this->selectedWorkout->name,
+        );
+    }
+
+    private function stepTwo(): void
+    {
+        $this->validate([
+            'selectedExerciseId' => 'required|exists:exercises,id',
+        ]);
+        $this->selectedExercise = Exercise::find($this->selectedExerciseId);
+
+        $this->title = sprintf(
+            "%s\n%s",
+            $this->selectedWorkout->name,
+            $this->selectedExercise->name
+        );
     }
 }
