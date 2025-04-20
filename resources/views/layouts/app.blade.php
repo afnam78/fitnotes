@@ -34,4 +34,5 @@
         </div>
         <x-toaster-hub />
     </body>
+@stack('scripts')
 </html>
