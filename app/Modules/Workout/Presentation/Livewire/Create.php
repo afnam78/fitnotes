@@ -6,7 +6,6 @@ namespace App\Modules\Workout\Presentation\Livewire;
 
 use App\Modules\Workout\Application\Commands\CreateWorkoutCommand;
 use App\Modules\Workout\Application\UseCases\CreateWorkoutUseCase;
-use App\Services\WorkoutService;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -24,16 +23,9 @@ final class Create extends Component
         'description' => 'nullable|string|max:1000',
     ];
 
-    private WorkoutService $service;
-
     public function render()
     {
         return view('workout::livewire.create');
-    }
-
-    public function boot(): void
-    {
-        $this->service = app()->make(WorkoutService::class);
     }
 
     public function create(CreateWorkoutUseCase $useCase): void

@@ -25,7 +25,7 @@ Route::prefix('workout')->middleware(['auth'])->group(function (): void {
     Route::get('create', Create::class)
         ->name('workout.create');
 
-    Route::get('update/{workout}', Update::class)
+    Route::get('update/{id}', Update::class)
         ->name('workout.update')
         ->where('workout', '[0-9]+');
 });

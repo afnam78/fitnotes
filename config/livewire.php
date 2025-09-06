@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'class_namespace' => 'App\\Livewire',
+    'class_namespace' => 'App\\Modules',
 
     /*
     |---------------------------------------------------------------------------
@@ -103,7 +103,7 @@ return [
     |
     */
 
-    'legacy_model_binding' => true,
+    'legacy_model_binding' => false,
 
     /*
     |---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Workout\Infrastructure\Providers;
 
-use App\Modules\Shared\Domain\Contracts\WorkoutRepositoryInterface;
+use App\Modules\Workout\Domain\Contracts\WorkoutRepositoryInterface;
 use App\Modules\Workout\Infrastructure\Repositories\WorkoutRepository;
 use Illuminate\Support\ServiceProvider;
 

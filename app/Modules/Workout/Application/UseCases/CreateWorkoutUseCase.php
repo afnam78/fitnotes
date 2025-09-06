@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Workout\Application\UseCases;
 
-use App\Modules\Shared\Domain\Contracts\WorkoutRepositoryInterface;
 use App\Modules\Workout\Application\Commands\CreateWorkoutCommand;
+use App\Modules\Workout\Domain\Contracts\WorkoutRepositoryInterface;
 use App\Modules\Workout\Domain\Entities\Workout;
 use Exception;
 

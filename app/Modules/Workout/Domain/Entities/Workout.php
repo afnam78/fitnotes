@@ -42,4 +42,14 @@ final class Workout
     {
         return $this->description;
     }
+
+    public function setName(string $value): void
+    {
+        $this->name = $value;
+    }
+
+    public function setDescription(?string $value): void
+    {
+        $this->description = $value;
+    }
 }
