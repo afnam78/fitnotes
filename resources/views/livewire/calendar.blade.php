@@ -1,9 +1,14 @@
 @php use App\Models\Workout; @endphp
 <div>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Calendario') }}
-        </h2>
+       <div class="flex justify-between">
+           <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+               {{ __('Calendario') }}
+           </h2>
+           <a href="{{route('exercise.register')}}" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition ease-in-out duration-150">
+               {{ __('Registrar') }}
+           </a>
+       </div>
     </x-slot>
 
     <div class="py-12">
