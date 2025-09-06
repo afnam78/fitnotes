@@ -89,14 +89,12 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
     {
         $workoutModels = \App\Models\Workout::where('user_id', $userId)->get();
 
-        $items = $workoutModels->map(function ($workoutModel) {
-            return new Workout(
-                id: $workoutModel->id,
-                name: $workoutModel->name,
-                userId: $workoutModel->user_id,
-                description: $workoutModel->description,
-            );
-        })->toArray();
+        $items = $workoutModels->map(fn ($workoutModel) => new Workout(
+            id: $workoutModel->id,
+            name: $workoutModel->name,
+            userId: $workoutModel->user_id,
+            description: $workoutModel->description,
+        ))->toArray();
 
         return new WorkoutList($items);
     }

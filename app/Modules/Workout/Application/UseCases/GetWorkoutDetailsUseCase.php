@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Workout\Application\UseCases;
 
 use App\Modules\Workout\Application\Commands\GetWorkoutDetailsCommand;
 use App\Modules\Workout\Application\Results\GetWorkoutDetailsResult;
 use App\Modules\Workout\Domain\Contracts\WorkoutRepositoryInterface;
 
-readonly class GetWorkoutDetailsUseCase
+final readonly class GetWorkoutDetailsUseCase
 {
     public function __construct(private WorkoutRepositoryInterface $repository)
     {

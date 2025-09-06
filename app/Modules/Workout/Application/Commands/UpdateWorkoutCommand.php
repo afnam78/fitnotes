@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Workout\Application\Commands;
 
-class UpdateWorkoutCommand
+final class UpdateWorkoutCommand
 {
     public function __construct(
         public int $workoutId,

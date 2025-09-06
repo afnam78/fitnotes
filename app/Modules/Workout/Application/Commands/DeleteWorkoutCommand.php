@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Modules\Workout\Application\Commands;
 
-readonly class DeleteWorkoutCommand
+final readonly class DeleteWorkoutCommand
 {
     public function __construct(
         public int $workoutId,
