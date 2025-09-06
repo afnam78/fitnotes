@@ -1,13 +1,16 @@
 <?php
 
-namespace App\Livewire\Workout;
+declare(strict_types=1);
+
+namespace App\Modules\Workout\Presentation\Livewire;
 
 use App\Models\Workout;
 use App\Services\WorkoutService;
+use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
 
-class Create extends Component
+final class Update extends Component
 {
     use Toastable;
 
@@ -22,12 +25,12 @@ class Create extends Component
 
     public function render()
     {
-        return view('livewire.workout.create');
+        return view('workout::livewire.update');
     }
 
-    public function mount(): void
+    public function mount(Workout $workout): void
     {
-        $this->workout = new Workout;
+        $this->workout = $workout;
     }
 
     public function boot(): void
@@ -35,20 +38,17 @@ class Create extends Component
         $this->service = app()->make(WorkoutService::class);
     }
 
-    public function create(): void
+    public function update(): void
     {
-
+        $this->validate();
         try {
-            $this->validate();
-            $this->service->create($this->workout);
+            $this->service->update($this->workout);
 
             redirect(route('workout'))->success(
-                'Entrenamiento creado correctamente'
+                'Entrenamiento actualizado correctamente',
             );
-        } catch (\Exception $e) {
-            $this->error('Error al crear el entrenamiento', [
-                'error' => $e->getMessage(),
-            ]);
+        } catch (Exception $e) {
+            $this->error('Error al actualizar el entrenamiento');
         }
     }
 }

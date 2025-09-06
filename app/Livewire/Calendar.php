@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire;
 
 use App\Models\Exercise;
@@ -9,7 +11,7 @@ use Illuminate\Support\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
-class Calendar extends Component
+final class Calendar extends Component
 {
     public ?Carbon $selectedDate = null;
     public ?Workout $selectedWorkout = null;
@@ -25,20 +27,18 @@ class Calendar extends Component
         return view('livewire.calendar');
     }
 
-    public function mount()
+    public function mount(): void
     {
         $this->workoutsGroupedByDate = Set::query()
             ->with('exercise.workout')
             ->distinct()
             ->get()
-            ->map(function (Set $item) {
-                return [
-                    'start' => $item->set_date,
-                    'title' => $item->exercise->workout->name,
-                    'id' => $item->id,
-                ];
-            })
-            ->unique(fn(array $item) => $item['start'] . $item['title'])
+            ->map(fn (Set $item) => [
+                'start' => $item->set_date,
+                'title' => $item->exercise->workout->name,
+                'id' => $item->id,
+            ])
+            ->unique(fn (array $item) => $item['start'] . $item['title'])
             ->values()
             ->toArray();
 
@@ -63,9 +63,7 @@ class Calendar extends Component
             ->where('set_date', $this->selectedDate->format('Y-m-d'))
             ->get()
             ->groupBy('exercise.workout.name')
-            ->map(function ($setsByWorkout) {
-                return $setsByWorkout->groupBy('exercise.name');
-            })
+            ->map(fn ($setsByWorkout) => $setsByWorkout->groupBy('exercise.name'))
             ->toArray();
 
         $this->dispatch('open-modal', 'showCalendarModal');
@@ -87,38 +85,32 @@ class Calendar extends Component
     {
         $max = $this->selectedExercise
             ->sets()
-            ->where(function ($query) {
-                return $query->where('set_date', $this->selectedDate->format('Y-m-d'));
-            })
+            ->where(fn ($query) => $query->where('set_date', $this->selectedDate->format('Y-m-d')))
             ->max('order');
 
         $this->selectedExercise->sets()->create([
             'reps' => $this->reps,
             'weight' => $this->weight,
             'set_date' => $this->selectedDate->format('Y-m-d'),
-            'order' => is_null($max) ? 1 : $max + 1,
+            'order' => null === $max ? 1 : $max + 1,
         ]);
 
         $this->workoutsInSelectedDate = Set::with('exercise.workout')
             ->where('set_date', $this->selectedDate->format('Y-m-d'))
             ->get()
             ->groupBy('exercise.workout.name')
-            ->map(function ($setsByWorkout) {
-                return $setsByWorkout->groupBy('exercise.name');
-            })->toArray();
+            ->map(fn ($setsByWorkout) => $setsByWorkout->groupBy('exercise.name'))->toArray();
 
         $this->workoutsGroupedByDate = Set::query()
             ->with('exercise.workout')
             ->distinct()
             ->get()
-            ->map(function (Set $item) {
-                return [
-                    'start' => $item->set_date,
-                    'title' => $item->exercise->workout->name,
-                    'id' => $item->id,
-                ];
-            })
-            ->unique(fn(array $item) => $item['start'] . $item['title'])
+            ->map(fn (Set $item) => [
+                'start' => $item->set_date,
+                'title' => $item->exercise->workout->name,
+                'id' => $item->id,
+            ])
+            ->unique(fn (array $item) => $item['start'] . $item['title'])
             ->values()
             ->toArray();
 

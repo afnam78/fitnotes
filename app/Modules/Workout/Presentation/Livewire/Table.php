@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Livewire\Workout;
+declare(strict_types=1);
+
+namespace App\Modules\Workout\Presentation\Livewire;
 
 use App\Services\WorkoutService;
+use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
 
-class Table extends Component
+final class Table extends Component
 {
     use Toastable;
 
@@ -14,7 +17,7 @@ class Table extends Component
 
     public function render()
     {
-        return view('livewire.workout.table', [
+        return view('workout::livewire.table', [
             'workouts' => auth()->user()->workouts()->select(['id', 'name'])->paginate(10),
         ]);
     }
@@ -29,9 +32,9 @@ class Table extends Component
         try {
             $this->service->delete($id);
             $this->success(
-                'Entrenamiento eliminado correctamente'
+                'Entrenamiento eliminado correctamente',
             );
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->error('Error al eliminar el entrenamiento');
         }
     }
