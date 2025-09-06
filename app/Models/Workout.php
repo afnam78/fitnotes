@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Workout extends Model
 {
+    protected $guarded = [];
+
     public function exercises(): HasMany
     {
         return $this->hasMany(Exercise::class);

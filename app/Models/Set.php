@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Set extends Model
 {
+
+    protected $guarded = [];
     public function exercise(): BelongsTo
     {
         return $this->belongsTo(Exercise::class);
