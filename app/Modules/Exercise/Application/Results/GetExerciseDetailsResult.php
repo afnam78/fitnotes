@@ -9,8 +9,8 @@ final class GetExerciseDetailsResult
     public function __construct(
         public int $id,
         public string $name,
-        public string $description,
-        public int $workoutId
+        public int $workoutId,
+        public ?string $description = null,
     ) {
     }
 }

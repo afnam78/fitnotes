@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Modules\Exercise\Application\Commands;
+namespace App\Modules\Calendar\Application\Commands;
 
-final readonly class GetUserWorkoutsCommand
+final readonly class GetEventsCommand
 {
     public function __construct(
         public int $userId,

@@ -90,6 +90,36 @@ final class ExerciseRepository implements ExerciseRepositoryInterface
         }
     }
 
+    public function getAllByWorkoutId(int $workoutId, int $userId): array
+    {
+        try {
+            $exerciseModels = \App\Modules\Exercise\Infrastructure\Database\Models\Exercise::with('workout')
+                ->whereHas('workout', function ($query) use ($userId): void {
+                    $query->where('user_id', $userId);
+                })
+                ->where('workout_id', $workoutId)
+                ->get();
+
+            return $exerciseModels->map(fn ($exerciseModel) => new Exercise(
+                id: $exerciseModel->id,
+                name: $exerciseModel->name,
+                workoutId: $exerciseModel->workout_id,
+                description: $exerciseModel->description,
+            ))->toArray();
+
+        } catch (Exception $e) {
+            Log::error('Error getting exercises by workout id', LogHelper::body(
+                exception: $e,
+                class: self::class,
+                method: __METHOD__,
+                data: [
+                    'workoutId' => $workoutId,
+                ],
+            ));
+            throw $e;
+        }
+    }
+
     public function delete(Exercise $exercise): void
     {
         try {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Exercise\Infrastructure\Database\Models;
 
-use App\Models\Set;
+use App\Modules\Set\Infrastructure\Database\Models\Set;
 use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

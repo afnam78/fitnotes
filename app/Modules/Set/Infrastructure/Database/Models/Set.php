@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Modules\Set\Infrastructure\Database\Models;
 
 use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
 use Illuminate\Database\Eloquent\Model;

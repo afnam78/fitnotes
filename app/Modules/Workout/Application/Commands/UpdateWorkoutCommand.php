@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Workout\Application\Commands;
 
-final class UpdateWorkoutCommand
+final readonly class UpdateWorkoutCommand
 {
     public function __construct(
         public int $workoutId,

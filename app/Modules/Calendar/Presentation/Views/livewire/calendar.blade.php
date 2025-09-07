@@ -33,22 +33,22 @@
                     @if($step == 0)
                         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selecciona un
                             entrenamiento</label>
-                        @foreach(Workout::all() as $workout)
-                            <button wire:click="workoutToSet({{ $workout->id }})"
+                        @foreach($this->workouts as $workout)
+                            <button wire:click="workoutToSet({{ $workout['id'] }})"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
-                                {{ $workout->name }}
+                                {{ $workout['name'] }}
                             </button>
                         @endforeach
                     @endif
 
                     @if($step == 1)
                         <h2 class="font-medium text-lg">
-                            {{$selectedWorkout->name}}
+                            {{$selectedWorkout['name']}}
                         </h2>
-                        @foreach($selectedWorkout->exercises as $exercise)
-                            <button wire:click="exerciseToSet({{ $exercise->id }})"
+                        @foreach($workoutExercises as $exercise)
+                            <button wire:click="exerciseToSet({{ $exercise['id'] }})"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
-                                {{ $exercise->name }}
+                                {{ $exercise['name'] }}
                             </button>
                         @endforeach
                     @endif
@@ -56,7 +56,7 @@
                     @if($step == 2)
                         <div class="flex items-center flex-col">
                             <h2 class="font-medium text-lg">
-                                {{$selectedWorkout->name}} - {{$selectedExercise->name}}
+                                {{$selectedWorkout['name']}} - {{$selectedExercise['name']}}
                             </h2>
                             <section class="flex justify-start gap-2">
                                 <div>
@@ -91,17 +91,17 @@
                     @if(!empty($workoutsInSelectedDate))
                         <div>
                             <ul class="list-disc">
-                                @foreach($workoutsInSelectedDate as $workout => $exercises)
+                                @foreach($workoutsInSelectedDate as $workouts)
                                     <li>
                                         <h3 class="text-lg font-semibold">
-                                            {{$workout}}
+                                            {{$workouts['name']}}
                                         </h3>
                                         <div>
-                                            @foreach($exercises as $exercise => $series)
+                                            @foreach($workouts['exercises'] as $exercise)
                                                 <div>
-                                                    <span class="font-medium"> - {{$exercise}}:</span>
+                                                    <span class="font-medium"> - {{$exercise['name']}}:</span>
                                                     <div class="list-decimal ml-2">
-                                                        @foreach($series as $serie)
+                                                        @foreach($exercise['sets'] as $serie)
                                                             <div>{{$serie['weight']}}kg x {{$serie['reps']}} reps</div>
                                                         @endforeach
                                                     </div>
@@ -122,7 +122,7 @@
 @script
 <script type="text/javascript">
     document.addEventListener('livewire:initialized', function () {
-        let workoutsGroupedByDate = @this.workoutsGroupedByDate;
+        let events = @this.events;
 
         let calendarEl = document.getElementById('calendar');
         let calendar = new Calendar(calendarEl, {
@@ -132,7 +132,7 @@
             selectable: false,
             locale: 'es',
             firstDay: 1,
-            events: workoutsGroupedByDate,
+            events: events,
             dateClick: function (event) {
                 $wire.dispatchSelf('openCalendarModal', {date: event.dateStr});
             },
@@ -142,13 +142,14 @@
                 $wire.dispatchSelf('openCalendarModal', {date: info.event.startStr});
             },
         });
+
         calendar.render();
 
         $wire.on('workoutUpdated', () => {
-            let updatedWorkoutsGroupedByDate = @this.workoutsGroupedByDate;
+            let events = @this.events;
 
             calendar.removeAllEvents();
-            calendar.addEventSource(updatedWorkoutsGroupedByDate);
+            calendar.addEventSource(events);
             calendar.render();
         });
 
