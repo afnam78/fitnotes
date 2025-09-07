@@ -16,7 +16,7 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
     public function create(Workout $workout): void
     {
         try {
-            \App\Models\Workout::create([
+            \App\Modules\Workout\Infrastructure\Database\Models\Workout::create([
                 'name' => $workout->name(),
                 'user_id' => $workout->userId(),
                 'description' => $workout->description(),
@@ -34,7 +34,7 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
 
     public function findByIdAndUserId(int $workoutId, int $userId): ?Workout
     {
-        $workoutModel = \App\Models\Workout::where('id', $workoutId)
+        $workoutModel = \App\Modules\Workout\Infrastructure\Database\Models\Workout::where('id', $workoutId)
             ->where('user_id', $userId)
             ->first();
 
@@ -49,7 +49,7 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
     public function update(Workout $workout): void
     {
         try {
-            $workoutModel = \App\Models\Workout::where('id', $workout->id())
+            $workoutModel = \App\Modules\Workout\Infrastructure\Database\Models\Workout::where('id', $workout->id())
                 ->where('user_id', $workout->userId())
                 ->firstOrFail();
 
@@ -72,7 +72,7 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
     public function delete(int $id): void
     {
         try {
-            $workout = \App\Models\Workout::findOrFail($id);
+            $workout = \App\Modules\Workout\Infrastructure\Database\Models\Workout::findOrFail($id);
 
             $workout->delete();
         } catch (Exception $e) {
@@ -87,7 +87,7 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
 
     public function getWorkoutsByUserId(int $userId): WorkoutList
     {
-        $workoutModels = \App\Models\Workout::where('user_id', $userId)->get();
+        $workoutModels = \App\Modules\Workout\Infrastructure\Database\Models\Workout::where('user_id', $userId)->get();
 
         $items = $workoutModels->map(fn ($workoutModel) => new Workout(
             id: $workoutModel->id,

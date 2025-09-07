@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Models\Exercise;
-use App\Models\Workout;
+use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
+use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Exception;
 use Illuminate\Support\Facades\Log;
 use InvalidArgumentException;

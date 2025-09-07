@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Livewire;
+namespace App\Modules\Shared\Presentation\Livewire;
 
-use App\Models\Exercise;
 use App\Models\Set;
-use App\Models\Workout;
+use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
+use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Illuminate\Support\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -24,7 +24,7 @@ final class Calendar extends Component
 
     public function render()
     {
-        return view('livewire.calendar');
+        return view('shared::livewire.calendar');
     }
 
     public function mount(): void

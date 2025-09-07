@@ -6,6 +6,7 @@ namespace App\Modules\Workout\Domain\Aggregates;
 
 use App\Modules\Workout\Domain\Entities\Workout;
 use Exception;
+use Illuminate\Support\Collection;
 
 final readonly class WorkoutList
 {
@@ -21,5 +22,10 @@ final readonly class WorkoutList
         if ($uniqueNames->isNotEmpty()) {
             throw new Exception("Workout name must be unique");
         }
+    }
+
+    public function items(): Collection
+    {
+        return collect($this->items);
     }
 }

@@ -28,7 +28,7 @@ new class extends Component
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('calendar')" :active="request()->routeIs('calendar')" wire:navigate>
+                    <x-nav-link :href="route('calendar')" :active="request()->routeIs('calendar')">
                         {{ __('Calendario') }}
                     </x-nav-link>
                     <x-nav-link :href="route('workout')" :active="request()->routeIs('workout')" wire:navigate>

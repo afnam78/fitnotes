@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 return [
-    App\Modules\Workout\Infrastructure\Providers\ModuleProvider::class,
     App\Providers\AppServiceProvider::class,
     App\Providers\VoltServiceProvider::class,
+    App\Modules\Workout\Infrastructure\Providers\ModuleProvider::class,
+    App\Modules\Exercise\Infrastructure\Providers\ModuleProvider::class,
+    App\Modules\Shared\Infrastructure\Providers\ModuleProvider::class,
 ];

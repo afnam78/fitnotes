@@ -17,6 +17,8 @@ final class ModuleProvider extends ServiceProvider
 
     public function register(): void
     {
+        $this->app->register(RouteProvider::class);
+
         $this->app->bind(WorkoutRepositoryInterface::class, WorkoutRepository::class);
     }
 }

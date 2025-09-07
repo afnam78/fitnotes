@@ -1,14 +1,11 @@
-@php use App\Models\Workout; @endphp
+@php use App\Modules\Workout\Infrastructure\Database\Models\Workout; @endphp
 <div>
     <x-slot name="header">
-       <div class="flex justify-between">
-           <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-               {{ __('Calendario') }}
-           </h2>
-           <a href="{{route('exercise.register')}}" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition ease-in-out duration-150">
-               {{ __('Registrar') }}
-           </a>
-       </div>
+        <div class="flex justify-between">
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                {{ __('Calendario') }}
+            </h2>
+        </div>
     </x-slot>
 
     <div class="py-12">
@@ -30,7 +27,7 @@
             </div>
             <section class="p-6">
                 @if($selectedDate)
-                    {{$selectedDate->format('d/m/Y')}}
+                    {{$selectedDate->isoFormat('dddd D [de] MMMM [de] YYYY')}}
                 @endif
                 <div class="mt-6">
                     @if($step == 0)
@@ -94,25 +91,25 @@
                     @if(!empty($workoutsInSelectedDate))
                         <div>
                             <ul class="list-disc">
-                            @foreach($workoutsInSelectedDate as $workout => $exercises)
-                                <li>
-                                    <h3 class="text-lg font-semibold">
-                                        {{$workout}}
-                                    </h3>
-                                    <div>
-                                        @foreach($exercises as $exercise => $series)
-                                            <div>
-                                                <span class="font-medium"> - {{$exercise}}:</span>
-                                                <div class="list-decimal ml-2">
-                                                    @foreach($series as $serie)
-                                                        <div>{{$serie['weight']}}kg x {{$serie['reps']}} reps</div>
-                                                    @endforeach
+                                @foreach($workoutsInSelectedDate as $workout => $exercises)
+                                    <li>
+                                        <h3 class="text-lg font-semibold">
+                                            {{$workout}}
+                                        </h3>
+                                        <div>
+                                            @foreach($exercises as $exercise => $series)
+                                                <div>
+                                                    <span class="font-medium"> - {{$exercise}}:</span>
+                                                    <div class="list-decimal ml-2">
+                                                        @foreach($series as $serie)
+                                                            <div>{{$serie['weight']}}kg x {{$serie['reps']}} reps</div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </li>
-                            @endforeach
+                                            @endforeach
+                                        </div>
+                                    </li>
+                                @endforeach
                             </ul>
 
                         </div>
@@ -124,7 +121,7 @@
 </div>
 @script
 <script type="text/javascript">
-    document.addEventListener('livewire:initialized', function() {
+    document.addEventListener('livewire:initialized', function () {
         let workoutsGroupedByDate = @this.workoutsGroupedByDate;
 
         let calendarEl = document.getElementById('calendar');
@@ -133,13 +130,13 @@
             initialView: 'dayGridMonth',
             editable: false,
             selectable: false,
+            locale: 'es',
+            firstDay: 1,
             events: workoutsGroupedByDate,
-            dateClick: function (event)
-            {
+            dateClick: function (event) {
                 $wire.dispatchSelf('openCalendarModal', {date: event.dateStr});
             },
-            eventClick: function (info)
-            {
+            eventClick: function (info) {
                 info.jsEvent.preventDefault();
 
                 $wire.dispatchSelf('openCalendarModal', {date: info.event.startStr});
