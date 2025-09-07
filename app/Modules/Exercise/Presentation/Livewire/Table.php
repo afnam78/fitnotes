@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace App\Modules\Exercise\Presentation\Livewire;
 
-use App\Services\ExerciseService;
+use App\Modules\Exercise\Application\Commands\DeleteExerciseCommand;
+use App\Modules\Exercise\Application\UseCases\DeleteExerciseUseCase;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -13,7 +14,6 @@ final class Table extends Component
 {
     use Toastable;
 
-    private ExerciseService $service;
 
     public function render()
     {
@@ -22,15 +22,16 @@ final class Table extends Component
         ]);
     }
 
-    public function boot(): void
-    {
-        $this->service = app()->make(ExerciseService::class);
-    }
-
-    public function delete(int $id): void
+    public function delete(int $id, DeleteExerciseUseCase $useCase): void
     {
         try {
-            $this->service->delete($id);
+            $command = new DeleteExerciseCommand(
+                id: $id,
+                userId: auth()->id(),
+            );
+
+            $useCase->handle($command);
+
             $this->success(
                 'Ejercicio eliminado correctamente'
             );

@@ -11,4 +11,6 @@ interface ExerciseRepositoryInterface
     public function create(Exercise $exercise): void;
 
     public function findByIdAndUserId(int $exerciseId, int $userId): ?Exercise;
+
+    public function delete(Exercise $exercise): void;
 }

@@ -6,7 +6,9 @@ namespace App\Modules\Exercise\Presentation\Livewire;
 
 use App\Modules\Exercise\Application\Commands\GetExerciseDetailsCommand;
 use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
+use App\Modules\Exercise\Application\Commands\UpdateExerciseCommand;
 use App\Modules\Exercise\Application\UseCases\GetExerciseDetailsUseCase;
+use App\Modules\Exercise\Application\UseCases\UpdateExerciseUseCase;
 use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
 use Exception;
 use Livewire\Component;
@@ -22,10 +24,10 @@ final class Update extends Component
 
 
     protected array $rules = [
-        'exercise.id' => 'required|exists:exercises,id',
+        'exercise.id' => 'required|numeric|exists:exercises,id',
         'exercise.name' => 'required|string|max:255',
         'exercise.description' => 'nullable|string|max:1000',
-        'exercise.workout_id' => 'required|exists:workouts,id',
+        'exercise.workout_id' => 'required|numeric|exists:workouts,id',
     ];
 
     public function render()
@@ -55,15 +57,23 @@ final class Update extends Component
         ];
     }
 
-    public function create(): void
+    public function create(UpdateExerciseUseCase $useCase): void
     {
+        $this->validate();
 
         try {
-            $this->validate();
-            $this->service->create($this->exercise);
+            $command = new UpdateExerciseCommand(
+                id: $this->exercise['id'],
+                name: $this->exercise['name'],
+                description: $this->exercise['description'],
+                workoutId: (int) $this->exercise['workout_id'],
+                userId: auth()->id(),
+            );
+
+            $useCase->handle($command);
 
             redirect(route('exercise'))->success(
-                'Entrenamiento creado correctamente'
+                'Entrenamiento actualizado correctamente'
             );
         } catch (Exception $e) {
             $this->error('Error al crear el entrenamiento', [
