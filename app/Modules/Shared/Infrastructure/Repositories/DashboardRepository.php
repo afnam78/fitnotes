@@ -56,7 +56,7 @@ final class DashboardRepository implements DashboardRepositoryInterface
     public function getWeeklyVolume(int $userId): float
     {
         try {
-            return $this->getWeekQuery($userId)->sum('weight');
+            return (float) $this->getWeekQuery($userId)->sum('weight');
         } catch (Exception $e) {
             Log::error($e->getMessage(), LogHelper::body(
                 exception: $e,
