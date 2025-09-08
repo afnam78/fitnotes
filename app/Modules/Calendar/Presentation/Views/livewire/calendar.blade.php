@@ -31,7 +31,7 @@
                 @endif
                 <div class="mt-6">
                     @if($step == 0)
-                        <label class="block mb-2 text-sm font-medium  dark:text-white">Selecciona un
+                        <label class="block mb-2 text-sm font-medium">Selecciona un
                             entrenamiento</label>
                         @foreach($this->workouts as $workout)
                             <button wire:click="workoutToSet({{ $workout['id'] }})"

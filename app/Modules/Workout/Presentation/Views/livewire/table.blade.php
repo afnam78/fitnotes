@@ -16,8 +16,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 ">
                     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 w-12">
                                     Acciones
@@ -29,9 +29,9 @@
                             </thead>
                             <tbody>
                             @foreach($workouts as $item)
-                                <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200">
-                                    <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap dark:text-white">
-                                        <a href="{{route('workout.update', $item->id)}}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Editar</a>
+                                <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
+                                    <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap">
+                                        <a href="{{route('workout.update', $item->id)}}" class="font-medium text-blue-600 hover:underline">Editar</a>
                                         <x-danger-button wire:confirm="¿Estás seguro de realizar esta acción?" wire:click="delete({{$item->id}})" class="ml-2">
                                             {{ __('Eliminar') }}
                                         </x-danger-button>
