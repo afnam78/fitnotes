@@ -14,7 +14,13 @@ export default {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                geist: ['Geist Mono', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'primary': '#008994',
+                'accent': '#7e4600',
+                'dark': '#3a3a3a'
+            }
         },
     },
 

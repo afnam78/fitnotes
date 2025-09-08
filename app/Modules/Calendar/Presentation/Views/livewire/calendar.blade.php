@@ -2,7 +2,7 @@
 <div>
     <x-slot name="header">
         <div class="flex justify-between">
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="font-semibold text-xl  leading-tight">
                 {{ __('Calendario') }}
             </h2>
         </div>
@@ -11,7 +11,7 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
+                <div class="p-6 ">
                     <div id="calendar" wire:ignore>
 
                     </div>
@@ -31,7 +31,7 @@
                 @endif
                 <div class="mt-6">
                     @if($step == 0)
-                        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Selecciona un
+                        <label class="block mb-2 text-sm font-medium  dark:text-white">Selecciona un
                             entrenamiento</label>
                         @foreach($this->workouts as $workout)
                             <button wire:click="workoutToSet({{ $workout['id'] }})"

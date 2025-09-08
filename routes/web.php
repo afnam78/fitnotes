@@ -3,11 +3,12 @@
 declare(strict_types=1);
 
 use App\Modules\Calendar\Presentation\Livewire\Calendar;
+use App\Modules\Shared\Presentation\Livewire\Dashboard;
 use Illuminate\Support\Facades\Route;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', Dashboard::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
