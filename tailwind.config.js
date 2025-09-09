@@ -7,13 +7,20 @@ export default {
         './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
         './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
+        './app/Modules/**/Presentation/**/Views/*.blade.php',
     ],
 
     theme: {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                geist: ['Geist Mono', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'primary': '#008994',
+                'accent': '#7e4600',
+                'dark': '#3a3a3a'
+            }
         },
     },
 
