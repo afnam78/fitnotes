@@ -9,7 +9,7 @@ use Illuminate\Support\Carbon;
 final readonly class CreateSetCommand
 {
     public function __construct(
-        public int    $exerciseId,
+        public int    $exerciseCatalogId,
         public int    $reps,
         public float  $weight,
         public int    $userId,

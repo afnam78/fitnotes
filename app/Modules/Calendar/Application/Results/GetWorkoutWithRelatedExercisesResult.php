@@ -20,7 +20,7 @@ final class GetWorkoutWithRelatedExercisesResult
         return [
             'workout_id' => $this->workoutId,
             'workout_name' => $this->workoutName,
-            'exercises' => array_map(fn (ExerciseDTO $exercise) => $exercise->toArray(), $this->exercises),
+            'exercise_categories' => array_map(fn (ExerciseDTO $exercise) => $exercise->toArray(), $this->exercises),
         ];
     }
 }

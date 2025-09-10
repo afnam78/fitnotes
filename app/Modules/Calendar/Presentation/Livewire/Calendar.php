@@ -11,8 +11,8 @@ use App\Modules\Calendar\Application\UseCases\CreateSetUseCase;
 use App\Modules\Calendar\Application\UseCases\GetEventsUseCase;
 use App\Modules\Calendar\Application\UseCases\GetRegistersByDateUseCase;
 use App\Modules\Calendar\Application\UseCases\GetWorkoutWithRelatedExercisesUseCase;
-use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
-use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
+use App\Modules\ExerciseCatalog\Application\Commands\GetUserWorkoutsCommand;
+use App\Modules\WorkoutCategory\Application\UseCases\GetUserWorkoutCategoriesUseCase;
 use Illuminate\Support\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Component;
@@ -24,11 +24,11 @@ final class Calendar extends Component
     use Toastable;
 
     public ?Carbon $selectedDate = null;
-    public array $selectedWorkout = [];
+    public array $selectedWorkoutCategory = [];
 
-    public array $workoutExercises = [];
+    public array $workoutExerciseCategories = [];
 
-    public array $selectedExercise = [];
+    public array $selectedExerciseCatalog = [];
     public array $workoutsInSelectedDate = [];
     public int $reps = 0;
     public float $weight = 0.0;
@@ -41,7 +41,7 @@ final class Calendar extends Component
         return view('calendar::livewire.calendar');
     }
 
-    public function mount(GetEventsUseCase $getEventsUseCase, GetUserWorkoutsUseCase $getUserWorkoutsUseCase): void
+    public function mount(GetEventsUseCase $getEventsUseCase, GetUserWorkoutCategoriesUseCase $getUserWorkoutsUseCase): void
     {
         $this->setEvents($getEventsUseCase);
 
@@ -61,8 +61,8 @@ final class Calendar extends Component
         try {
             $this->reset([
                 'selectedDate',
-                'selectedWorkout',
-                'selectedExercise',
+                'selectedWorkoutCategory',
+                'selectedExerciseCatalog',
                 'workoutsInSelectedDate',
                 'reps',
                 'weight',
@@ -78,7 +78,7 @@ final class Calendar extends Component
         }
     }
 
-    public function workoutToSet(int $selectedWorkout, GetWorkoutWithRelatedExercisesUseCase $useCase): void
+    public function workoutCategoryToSet(int $selectedWorkout, GetWorkoutWithRelatedExercisesUseCase $useCase): void
     {
         try {
             $command = new GetWorkoutWithRelatedExercisesCommand(
@@ -88,12 +88,12 @@ final class Calendar extends Component
 
             $result = $useCase->handle($command);
 
-            $this->selectedWorkout = [
+            $this->selectedWorkoutCategory = [
                 'id' => $result->workoutId,
                 'name' => $result->workoutName,
             ];
 
-            $this->workoutExercises = $result->toArray()['exercises'];
+            $this->workoutExerciseCategories = $result->toArray()['exercise_categories'] ?? [];
 
             $this->step = 1;
         } catch (Throwable $e) {
@@ -104,7 +104,7 @@ final class Calendar extends Component
     public function exerciseToSet(int $selectedExercise): void
     {
         try {
-            $this->selectedExercise = $this->getExerciseToSet($selectedExercise);
+            $this->selectedExerciseCatalog = $this->getExerciseToSet($selectedExercise);
 
             $this->step = 2;
         } catch (Throwable $e) {
@@ -116,7 +116,7 @@ final class Calendar extends Component
     {
         try {
             $createSetCommand = new \App\Modules\Calendar\Application\Commands\CreateSetCommand(
-                exerciseId: $this->selectedExercise['id'],
+                exerciseCatalogId: $this->selectedExerciseCatalog['id'],
                 reps: $this->reps,
                 weight: $this->weight,
                 userId: auth()->id(),
@@ -135,13 +135,14 @@ final class Calendar extends Component
 
             $this->dispatch('workoutUpdated', $this->events);
         } catch (Throwable $e) {
+            dd($e->getMessage());
             $this->error('Error');
         }
     }
 
     private function getExerciseToSet(int $selectedExercise): array
     {
-        $item = array_filter($this->workoutExercises, fn (array $exercise) => $exercise['id'] === $selectedExercise);
+        $item = array_filter($this->workoutExerciseCategories, fn (array $exercise) => $exercise['id'] === $selectedExercise);
 
         return data_get(array_values($item), 0, []);
     }

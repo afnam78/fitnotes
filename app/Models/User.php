@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
-use App\Modules\Workout\Infrastructure\Database\Models\Workout;
+use App\Modules\ExerciseCatalog\Infrastructure\Database\Models\ExerciseCatalog;
+use App\Modules\WorkoutCategory\Infrastructure\Database\Models\WorkoutCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -38,14 +37,14 @@ final class User extends Authenticatable
         'remember_token',
     ];
 
-    public function workouts(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function workoutCategories(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(Workout::class);
+        return $this->hasMany(WorkoutCategory::class);
     }
 
-    public function exercises(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    public function exerciseCatalogs(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {
-        return $this->hasManyThrough(Exercise::class, Workout::class);
+        return $this->hasManyThrough(ExerciseCatalog::class, WorkoutCategory::class);
     }
 
     /**

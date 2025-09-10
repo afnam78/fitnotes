@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Calendar\Application\DTOs\WorkoutWithRelatedExercises;
 
-use App\Modules\Exercise\Domain\Entities\Exercise;
+use App\Modules\ExerciseCatalog\Domain\Entities\ExerciseCatalog;
 
 final class ExerciseDTO
 {
@@ -14,7 +14,7 @@ final class ExerciseDTO
     ) {
     }
 
-    public static function toDTO(Exercise $exercise): ExerciseDTO
+    public static function toDTO(ExerciseCatalog $exercise): ExerciseDTO
     {
         return new ExerciseDTO(
             id: $exercise->id(),

@@ -4,52 +4,23 @@ declare(strict_types=1);
 
 namespace App\Modules\Workout\Domain\Entities;
 
+use App\Modules\Exercise\Domain\Entities\Exercise;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
+
 final class Workout
 {
-    private int $id;
-    private string $name;
-    private int $userId;
-    private ?string $description;
-
     public function __construct(
-        int $id,
-        string $name,
-        int $userId,
-        ?string $description,
+        private int $id,
+        private int $userId,
+        private Carbon $date,
+        private Collection $exercises = new Collection(),
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->userId = $userId;
-        $this->description = $description;
+
     }
 
-    public function id(): int
+    public function findExerciseById(int $id): ?Exercise
     {
-        return $this->id;
-    }
-
-    public function name(): string
-    {
-        return $this->name;
-    }
-
-    public function userId(): int
-    {
-        return $this->userId;
-    }
-
-    public function description(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setName(string $value): void
-    {
-        $this->name = $value;
-    }
-
-    public function setDescription(?string $value): void
-    {
-        $this->description = $value;
+        return $this->exercises->first(fn ($exercise) => $exercise->id() === $id);
     }
 }

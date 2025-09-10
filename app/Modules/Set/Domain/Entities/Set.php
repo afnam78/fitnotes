@@ -4,32 +4,29 @@ declare(strict_types=1);
 
 namespace App\Modules\Set\Domain\Entities;
 
-use Illuminate\Support\Carbon;
-
 final class Set
 {
     private int $id;
-    private int $exerciseId;
+    private int $exerciseCatalogId;
     private int $reps;
     private float $weight;
 
     private int $order;
 
-    private Carbon $date;
 
 
     public function __construct(
-        int   $exerciseId,
+        int   $id,
+        int   $exerciseCatalogId,
         int   $reps,
         float $weight,
         int   $order,
-        Carbon $date,
     ) {
-        $this->exerciseId = $exerciseId;
+        $this->id = $id;
+        $this->exerciseCatalogId = $exerciseCatalogId;
         $this->reps = $reps;
         $this->weight = $weight;
         $this->order = $order;
-        $this->date = $date;
     }
 
 
@@ -38,9 +35,9 @@ final class Set
         return $this->id;
     }
 
-    public function exerciseId(): int
+    public function exerciseCatalogId(): int
     {
-        return $this->exerciseId;
+        return $this->exerciseCatalogId;
     }
 
     public function reps(): int
@@ -56,10 +53,5 @@ final class Set
     public function order(): int
     {
         return $this->order;
-    }
-
-    public function date(): Carbon
-    {
-        return $this->date;
     }
 }

@@ -18,15 +18,15 @@ final class EventRepository implements EventRepositoryInterface
     {
         try {
             return Set::query()
-                ->with('exercise.workout')
+                ->with('exercise.workout', 'exercise.exerciseCatalog.workoutCategory')
                 ->whereHas('exercise.workout', function ($query): void {
                     $query->where('user_id', auth()->id());
                 })
                 ->distinct()
                 ->get()
                 ->map(fn (Set $item) => new Event(
-                    start: Carbon::parse($item->set_date),
-                    title: $item->exercise->workout->name,
+                    start: Carbon::parse($item->exercise->workout->date),
+                    title: $item->exercise->exerciseCatalog->workoutCategory->name,
                     id: $item->id,
                 ))
                 ->unique(fn (Event $item) => $item->start()->format('d/m/y') . $item->title())

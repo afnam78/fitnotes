@@ -32,10 +32,10 @@ new class extends Component
                     <x-nav-link :href="route('calendar')" :active="request()->routeIs('calendar')">
                         {{ __('Calendario') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('workout')" :active="request()->routeIs('workout')" wire:navigate>
+                    <x-nav-link :href="route('workout-category')" :active="request()->routeIs('workout')" wire:navigate>
                         {{ __('Entrenamientos') }}
                     </x-nav-link>
-                    <x-nav-link :href="route('exercise')" :active="request()->routeIs('exercise')" wire:navigate>
+                    <x-nav-link :href="route('exercise-catalog')" :active="request()->routeIs('exercise')" wire:navigate>
                         {{ __('Ejercicios') }}
                     </x-nav-link>
                 </div>

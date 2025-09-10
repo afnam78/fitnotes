@@ -1,4 +1,4 @@
-@php use App\Modules\Workout\Infrastructure\Database\Models\Workout; @endphp
+@php @endphp
 <div>
     <x-slot name="header">
         <div class="flex justify-between">
@@ -34,7 +34,7 @@
                         <label class="block mb-2 text-sm font-medium">Selecciona un
                             entrenamiento</label>
                         @foreach($this->workouts as $workout)
-                            <button wire:click="workoutToSet({{ $workout['id'] }})"
+                            <button wire:click="workoutCategoryToSet({{ $workout['id'] }})"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
                                 {{ $workout['name'] }}
                             </button>
@@ -43,9 +43,9 @@
 
                     @if($step == 1)
                         <h2 class="font-medium text-lg">
-                            {{$selectedWorkout['name']}}
+                            {{$selectedWorkoutCategory['name']}}
                         </h2>
-                        @foreach($workoutExercises as $exercise)
+                        @foreach($workoutExerciseCategories as $exercise)
                             <button wire:click="exerciseToSet({{ $exercise['id'] }})"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-1">
                                 {{ $exercise['name'] }}
@@ -56,7 +56,7 @@
                     @if($step == 2)
                         <div class="flex items-center flex-col">
                             <h2 class="font-medium text-lg">
-                                {{$selectedWorkout['name']}} - {{$selectedExercise['name']}}
+                                {{$selectedWorkoutCategory['name']}} - {{$selectedExerciseCatalog['name']}}
                             </h2>
                             <section class="flex justify-start gap-2">
                                 <div>

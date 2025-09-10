@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Modules\Shared\Infrastructure\Repositories;
 
+use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
 use App\Modules\Set\Infrastructure\Database\Models\Set;
 use App\Modules\Shared\Domain\Contracts\DashboardRepositoryInterface;
 use App\Modules\Shared\Domain\Helpers\LogHelper;
-use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +17,14 @@ final class DashboardRepository implements DashboardRepositoryInterface
     public function getWorkoutsCountToday(int $userId): int
     {
         try {
-            return Workout::with('exercises.sets')
-                ->where('user_id', $userId)
-                ->whereHas('exercises.sets', function ($query): void {
-                    $query->whereDate('set_date', now()->format('Y-m-d'));
+            return Exercise::with('workout')
+                ->whereHas('workout', function ($query) use ($userId): void {
+                    $query->where('user_id', $userId)
+                        ->whereDate('date', now()->format('Y-m-d'));
                 })
+                ->distinct()
                 ->count();
+
         } catch (Exception $e) {
             Log::error('Error getting workouts count today', LogHelper::body(
                 exception: $e,
@@ -75,9 +77,9 @@ final class DashboardRepository implements DashboardRepositoryInterface
         $lastOfCurrentWeek = now()->endOfWeek()->format('Y-m-d');
 
         return Set::with('exercise.workout')
-            ->whereHas('exercise.workout', function ($query): void {
-                $query->where('user_id', auth()->id());
-            })
-            ->whereBetween('set_date', [$firstOfCurrentWeek, $lastOfCurrentWeek]);
+            ->whereHas('exercise.workout', function ($query) use ($firstOfCurrentWeek, $lastOfCurrentWeek, $userId): void {
+                $query->where('user_id', $userId)
+                    ->whereBetween('date', [$firstOfCurrentWeek, $lastOfCurrentWeek]);
+            });
     }
 }

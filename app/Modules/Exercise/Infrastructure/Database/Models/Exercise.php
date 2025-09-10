@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Exercise\Infrastructure\Database\Models;
 
+use App\Modules\ExerciseCatalog\Infrastructure\Database\Models\ExerciseCatalog;
 use App\Modules\Set\Infrastructure\Database\Models\Set;
 use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Illuminate\Database\Eloquent\Model;
@@ -21,5 +22,10 @@ final class Exercise extends Model
     public function sets(): HasMany
     {
         return $this->hasMany(Set::class);
+    }
+
+    public function exerciseCatalog(): BelongsTo
+    {
+        return $this->belongsTo(ExerciseCatalog::class);
     }
 }

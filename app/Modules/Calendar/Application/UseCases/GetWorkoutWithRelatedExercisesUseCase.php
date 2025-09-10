@@ -7,12 +7,12 @@ namespace App\Modules\Calendar\Application\UseCases;
 use App\Modules\Calendar\Application\Commands\GetWorkoutWithRelatedExercisesCommand;
 use App\Modules\Calendar\Application\DTOs\WorkoutWithRelatedExercises\ExerciseDTO;
 use App\Modules\Calendar\Application\Results\GetWorkoutWithRelatedExercisesResult;
-use App\Modules\Calendar\Domain\Contracts\WorkoutRepositoryInterface;
-use App\Modules\Exercise\Domain\Entities\Exercise;
+use App\Modules\Calendar\Domain\Contracts\WorkoutCategoryRepositoryInterface;
+use App\Modules\ExerciseCatalog\Domain\Entities\ExerciseCatalog;
 
-final class GetWorkoutWithRelatedExercisesUseCase
+final readonly class GetWorkoutWithRelatedExercisesUseCase
 {
-    public function __construct(private readonly WorkoutRepositoryInterface $workoutRepository)
+    public function __construct(private WorkoutCategoryRepositoryInterface $workoutRepository)
     {
     }
 
@@ -24,13 +24,13 @@ final class GetWorkoutWithRelatedExercisesUseCase
                 userId: $command->userId,
             );
 
-        $workout = $workoutAndExercises['workout'];
-        $exercises = $workoutAndExercises['exercises'];
+        $workout = $workoutAndExercises['workout_category'];
+        $exercises = $workoutAndExercises['exercise_catalogs'];
 
         return new GetWorkoutWithRelatedExercisesResult(
             workoutId: $command->workoutId,
             workoutName: $workout->name(),
-            exercises: array_map(fn (Exercise $exercise) => ExerciseDTO::toDTO($exercise), $exercises),
+            exercises: array_map(fn (ExerciseCatalog $exercise) => ExerciseDTO::toDTO($exercise), $exercises),
         );
     }
 }
