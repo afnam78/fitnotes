@@ -87,9 +87,18 @@ new class extends Component
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-{{--            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>--}}
-{{--                {{ __('Dashboard') }}--}}
-{{--            </x-responsive-nav-link>--}}
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
+                {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('calendar')" :active="request()->routeIs('calendar')" wire:navigate>
+                {{ __('Calendario') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('workout')" :active="request()->routeIs('workout')" wire:navigate>
+                {{ __('Entrenamientos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('exercise')" :active="request()->routeIs('exercise')" wire:navigate>
+                {{ __('Ejercicios') }}
+            </x-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
