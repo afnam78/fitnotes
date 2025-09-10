@@ -4,10 +4,9 @@
         <h2 class="font-semibold text-xl  leading-tight">
             {{ __('Tipo de entrenamientos') }}
         </h2>
-
-        <a href="{{route('workout-category.create')}}" class="inline-flex items-center px-4 py-2 bg-blue-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-600 active:bg-blue-600 focus:outline-none focus:border-blue-700 focus:ring focus:ring-blue-200 disabled:opacity-25 transition ease-in-out duration-150">
+        <x-anchor href="{{route('workout-category.create')}}">
             {{ __('Crear') }}
-        </a>
+        </x-anchor>
     </div>
     </x-slot>
 

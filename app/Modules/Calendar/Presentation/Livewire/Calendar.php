@@ -32,7 +32,6 @@ final class Calendar extends Component
     public array $workoutsInSelectedDate = [];
     public int $reps = 0;
     public float $weight = 0.0;
-    public int $step = 0;
     public array $events = [];
     public array $workouts = [];
 
@@ -64,9 +63,9 @@ final class Calendar extends Component
                 'selectedWorkoutCategory',
                 'selectedExerciseCatalog',
                 'workoutsInSelectedDate',
+                'workoutExerciseCategories',
                 'reps',
                 'weight',
-                'step',
             ]);
 
             $this->selectedDate = Carbon::parse($date);
@@ -81,6 +80,10 @@ final class Calendar extends Component
     public function workoutCategoryToSet(int $selectedWorkout, GetWorkoutWithRelatedExercisesUseCase $useCase): void
     {
         try {
+            $this->reset([
+                'selectedExerciseCatalog',
+            ]);
+
             $command = new GetWorkoutWithRelatedExercisesCommand(
                 workoutId: $selectedWorkout,
                 userId: auth()->id(),
@@ -95,7 +98,6 @@ final class Calendar extends Component
 
             $this->workoutExerciseCategories = $result->toArray()['exercise_categories'] ?? [];
 
-            $this->step = 1;
         } catch (Throwable $e) {
             $this->error('Error');
         }
@@ -106,7 +108,6 @@ final class Calendar extends Component
         try {
             $this->selectedExerciseCatalog = $this->getExerciseToSet($selectedExercise);
 
-            $this->step = 2;
         } catch (Throwable $e) {
             $this->error('Error');
         }
@@ -135,7 +136,6 @@ final class Calendar extends Component
 
             $this->dispatch('workoutUpdated', $this->events);
         } catch (Throwable $e) {
-            dd($e->getMessage());
             $this->error('Error');
         }
     }
