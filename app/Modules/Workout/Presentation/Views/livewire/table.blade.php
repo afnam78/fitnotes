@@ -29,11 +29,14 @@
                             <tbody>
                             @foreach($workouts as $item)
                                 <tr class="odd:bg-white even:bg-gray-50 border-b border-gray-200">
-                                    <th scope="row" class="px-6 py-4 font-medium  whitespace-nowrap">
-                                        <a href="{{route('workout.update', $item->id)}}" class="font-medium text-blue-600 hover:underline">Editar</a>
-                                        <x-danger-button wire:confirm="¿Estás seguro de realizar esta acción?" wire:click="delete({{$item->id}})" class="ml-2">
-                                            {{ __('Eliminar') }}
-                                        </x-danger-button>
+                                    <th scope="row" class="px-6 py-4 font-medium flex gap-1 items-center whitespace-nowrap">
+                                        <a href="{{route('workout.update', $item->id)}}" class="bg-yellow-500 text-white p-1 rounded-md">
+                                            <x-edit></x-edit>
+                                        </a>
+
+                                        <button class="bg-red-600 text-white p-1 rounded-md" wire:confirm="¿Estás seguro de realizar esta acción?" wire:click="delete({{$item->id}})">
+                                            <x-trash></x-trash>
+                                        </button>
                                     </th>
                                     <td class="px-6 py-4">
                                         {{$item->name}}
