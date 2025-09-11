@@ -10,6 +10,7 @@ final class GetDashboardKPIResult
         public int   $workoutsToday,
         public int   $currentWeekSets,
         public float $weeklyVolume,
+        public array $getWeeklyRecordsExercises,
     ) {
     }
 }
