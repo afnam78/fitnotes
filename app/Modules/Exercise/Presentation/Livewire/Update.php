@@ -65,10 +65,10 @@ final class Update extends Component
             $useCase->handle($command);
 
             redirect(route('exercise'))->success(
-                'Entrenamiento actualizado correctamente'
+                'Ejercicio actualizado correctamente'
             );
         } catch (Exception $e) {
-            $this->error('Error al crear el entrenamiento', [
+            $this->error('Error al crear el ejercicio', [
                 'error' => $e->getMessage(),
             ]);
         }

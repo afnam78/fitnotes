@@ -34,35 +34,39 @@
                 <div class="mt-6 space-y-2">
                     <div>
                         <label class="block mb-2 text-sm font-medium">Tipo de entrenamiento:</label>
-                        @foreach($this->workouts as $workout)
-                            @if(data_get($selectedWorkout, 'id') === $workout['id'])
-                                <x-primary-button
-                                    wire:click="workoutToSet({{ $workout['id'] }})">
-                                    {{ $workout['name'] }}
-                                </x-primary-button>
-                            @else
-                                <x-secondary-button
-                                    wire:click="workoutToSet({{ $workout['id'] }})">
-                                    {{ $workout['name'] }}
-                                </x-secondary-button>
-                            @endif
-                        @endforeach
+                        <div class="grid grid-cols-3 gap-1">
+                            @foreach($this->workouts as $workout)
+                                @if(data_get($selectedWorkout, 'id') === $workout['id'])
+                                    <x-primary-button
+                                        wire:click="workoutToSet({{ $workout['id'] }})">
+                                        {{ $workout['name'] }}
+                                    </x-primary-button>
+                                @else
+                                    <x-secondary-button
+                                        wire:click="workoutToSet({{ $workout['id'] }})">
+                                        {{ $workout['name'] }}
+                                    </x-secondary-button>
+                                @endif
+                            @endforeach
+                        </div>
                         <x-input-error :messages="$errors->get('selectedWorkout.id')" class="mt-2"/>
                     </div>
 
                     <div>
                         <label class="block mb-2 text-sm font-medium">Ejercicio:</label>
-                        @foreach($workoutExercises as $exercise)
-                            @if(data_get($selectedExercise, 'id') === $exercise['id'])
-                                <x-primary-button wire:click="exerciseToSet({{ $exercise['id'] }})">
-                                    {{ $exercise['name'] }}
-                                </x-primary-button>
-                            @else
-                                <x-secondary-button wire:click="exerciseToSet({{ $exercise['id'] }})">
-                                    {{ $exercise['name'] }}
-                                </x-secondary-button>
-                            @endif
-                        @endforeach
+                        <div class="grid grid-cols-3 gap-1">
+                            @foreach($workoutExercises as $exercise)
+                                @if(data_get($selectedExercise, 'id') === $exercise['id'])
+                                    <x-primary-button wire:click="exerciseToSet({{ $exercise['id'] }})">
+                                        {{ $exercise['name'] }}
+                                    </x-primary-button>
+                                @else
+                                    <x-secondary-button wire:click="exerciseToSet({{ $exercise['id'] }})">
+                                        {{ $exercise['name'] }}
+                                    </x-secondary-button>
+                                @endif
+                            @endforeach
+                        </div>
                         <x-input-error :messages="$errors->get('selectedExercise.id')" class="mt-2"/>
                     </div>
                     <div class="flex items-center flex-col w-full mt-4">
