@@ -47,6 +47,7 @@
                                 </x-secondary-button>
                             @endif
                         @endforeach
+                        <x-input-error :messages="$errors->get('selectedWorkout.id')" class="mt-2"/>
                     </div>
 
                     <div>
@@ -62,6 +63,7 @@
                                 </x-secondary-button>
                             @endif
                         @endforeach
+                        <x-input-error :messages="$errors->get('selectedExercise.id')" class="mt-2"/>
                     </div>
                     <div class="flex items-center flex-col w-full mt-4">
                         <section class="grid gap-2 w-full">

@@ -32,7 +32,6 @@ final class Calendar extends Component
     public array $workoutsInSelectedDate = [];
     public int $reps = 0;
     public float $weight = 0.0;
-    public int $step = 0;
     public array $events = [];
     public array $workouts = [];
 
@@ -66,7 +65,6 @@ final class Calendar extends Component
                 'workoutsInSelectedDate',
                 'reps',
                 'weight',
-                'step',
             ]);
 
             $this->selectedDate = Carbon::parse($date);
@@ -94,8 +92,6 @@ final class Calendar extends Component
             ];
 
             $this->workoutExercises = $result->toArray()['exercises'];
-
-            $this->step = 1;
         } catch (Throwable $e) {
             $this->error('Error');
         }
@@ -105,8 +101,6 @@ final class Calendar extends Component
     {
         try {
             $this->selectedExercise = $this->getExerciseToSet($selectedExercise);
-
-            $this->step = 2;
         } catch (Throwable $e) {
             $this->error('Error');
         }
@@ -114,6 +108,15 @@ final class Calendar extends Component
 
     public function addSerie(CreateSetUseCase $createSetUseCase, GetEventsUseCase $getEventsUseCase, GetRegistersByDateUseCase $getRegistersByDateUseCase): void
     {
+
+        $this->validate([
+            'selectedExercise.id' => 'required|exists:exercises,id',
+            'reps' => 'required|numeric|min:0',
+            'weight' => 'required|numeric|min:0',
+            'selectedDate' => 'required|date',
+            'selectedWorkout.id' => 'required|exists:workouts,id',
+        ]);
+
         try {
             $createSetCommand = new \App\Modules\Calendar\Application\Commands\CreateSetCommand(
                 exerciseId: $this->selectedExercise['id'],
@@ -137,6 +140,24 @@ final class Calendar extends Component
         } catch (Throwable $e) {
             $this->error('Error');
         }
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'selectedExercise.id.required' => 'Debes seleccionar un ejercicio',
+            'selectedExercise.id.exists' => 'El ejercicio seleccionado no es válido',
+            'reps.required' => 'Debes ingresar las repeticiones',
+            'reps.numeric' => 'Las repeticiones deben ser un número',
+            'reps.min' => 'Las repeticiones deben ser un número positivo',
+            'weight.required' => 'Debes ingresar el peso',
+            'weight.numeric' => 'El peso debe ser un número',
+            'weight.min' => 'El peso debe ser un número positivo',
+            'selectedDate.required' => 'La fecha es obligatoria',
+            'selectedDate.date' => 'La fecha no es válida',
+            'selectedWorkout.id.required' => 'Debes seleccionar un entrenamiento',
+            'selectedWorkout.id.exists' => 'El entrenamiento seleccionado no es válido',
+        ];
     }
 
     private function getExerciseToSet(int $selectedExercise): array

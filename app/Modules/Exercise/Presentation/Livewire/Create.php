@@ -65,4 +65,17 @@ final class Create extends Component
             ]);
         }
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es requerido',
+            'name.string' => 'El nombre debe ser una cadena de texto',
+            'name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'description.string' => 'La descripción debe ser una cadena de texto',
+            'description.max' => 'La descripción no debe exceder los 1000 caracteres',
+            'workout_id.required' => 'Debes seleccionar un entrenamiento',
+            'workout_id.exists' => 'El entrenamiento no existe',
+        ];
+    }
 }

@@ -22,14 +22,6 @@ final class Update extends Component
 
     public array $workouts = [];
 
-
-    protected array $rules = [
-        'exercise.id' => 'required|numeric|exists:exercises,id',
-        'exercise.name' => 'required|string|max:255',
-        'exercise.description' => 'nullable|string|max:1000',
-        'exercise.workout_id' => 'required|numeric|exists:workouts,id',
-    ];
-
     public function render()
     {
         return view('exercise::livewire.update', [
@@ -80,5 +72,28 @@ final class Update extends Component
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'exercise.id' => 'required|numeric|exists:exercises,id',
+            'exercise.name' => 'required|string|max:255',
+            'exercise.description' => 'nullable|string|max:1000',
+            'exercise.workout_id' => 'required|exists:workouts,id',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'exercise.name.required' => 'El nombre es requerido',
+            'exercise.name.string' => 'El nombre debe ser una cadena de texto',
+            'exercise.name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'exercise.description.string' => 'La descripción debe ser una cadena de texto',
+            'exercise.description.max' => 'La descripción no debe exceder los 1000 caracteres',
+            'exercise.workout_id.required' => 'Debes seleccionar un entrenamiento',
+            'exercise.workout_id.exists' => 'El entrenamiento no existe',
+        ];
     }
 }
