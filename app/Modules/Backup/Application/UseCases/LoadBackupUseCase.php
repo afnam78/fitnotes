@@ -6,7 +6,6 @@ namespace App\Modules\Backup\Application\UseCases;
 
 use App\Modules\Backup\Application\Commands\LoadBackupCommand;
 use App\Modules\Backup\Infrastructure\Jobs\LoadBackup;
-use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 
 final class LoadBackupUseCase
 {
