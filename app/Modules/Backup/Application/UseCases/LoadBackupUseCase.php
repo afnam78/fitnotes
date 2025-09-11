@@ -19,7 +19,7 @@ final class LoadBackupUseCase
         $json = file_get_contents($command->filePath);
         $data = json_decode($json, true);
 
-        Workout::destroy(Workout::all(['id'])->pluck('id')->toArray());
+        auth()->user()->workouts()->delete();
 
         LoadBackup::dispatch($data, $command->userId);
     }
