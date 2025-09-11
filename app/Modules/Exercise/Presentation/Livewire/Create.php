@@ -7,6 +7,7 @@ namespace App\Modules\Exercise\Presentation\Livewire;
 use App\Modules\Exercise\Application\Commands\CreateExerciseCommand;
 use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
 use App\Modules\Exercise\Application\UseCases\CreateExerciseUseCase;
+use App\Modules\Exercise\Domain\Exceptions\ExerciseAlreadyExists;
 use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
 use Exception;
 use Livewire\Component;
@@ -59,10 +60,25 @@ final class Create extends Component
             redirect(route('exercise'))->success(
                 'Ejercicio creado correctamente'
             );
+        } catch (ExerciseAlreadyExists $e) {
+            $this->error('Ya existe un ejercicio con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al crear el ejercicio', [
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es requerido',
+            'name.string' => 'El nombre debe ser una cadena de texto',
+            'name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'description.string' => 'La descripción debe ser una cadena de texto',
+            'description.max' => 'La descripción no debe exceder los 1000 caracteres',
+            'workout_id.required' => 'Debes seleccionar un entrenamiento',
+            'workout_id.exists' => 'El entrenamiento no existe',
+        ];
     }
 }

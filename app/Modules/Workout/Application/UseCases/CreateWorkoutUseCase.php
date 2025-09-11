@@ -21,6 +21,10 @@ final class CreateWorkoutUseCase
     public function handle(CreateWorkoutCommand $command): void
     {
         $workout = $this->makeEntity($command);
+        $workouts = $this->repository->getWorkoutsByUserId($command->userId);
+
+        $workouts->validateIsUnique($workout);
+
         $this->repository->create($workout);
     }
 

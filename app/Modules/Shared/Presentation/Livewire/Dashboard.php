@@ -7,9 +7,11 @@ namespace App\Modules\Shared\Presentation\Livewire;
 use App\Modules\Shared\Application\Commands\GetDashboardKPICommand;
 use App\Modules\Shared\Application\UseCases\GetDashboardKPIUseCase;
 use Livewire\Component;
+use Masmerise\Toaster\Toastable;
 
 final class Dashboard extends Component
 {
+    use Toastable;
     public array $motivationalMessage;
     public int $workoutsToday = 0;
     public int $setsCurrentWeek = 0;

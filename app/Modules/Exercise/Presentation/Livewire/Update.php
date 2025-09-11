@@ -9,6 +9,7 @@ use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
 use App\Modules\Exercise\Application\Commands\UpdateExerciseCommand;
 use App\Modules\Exercise\Application\UseCases\GetExerciseDetailsUseCase;
 use App\Modules\Exercise\Application\UseCases\UpdateExerciseUseCase;
+use App\Modules\Exercise\Domain\Exceptions\ExerciseAlreadyExists;
 use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
 use Exception;
 use Livewire\Component;
@@ -21,14 +22,6 @@ final class Update extends Component
     public array $exercise;
 
     public array $workouts = [];
-
-
-    protected array $rules = [
-        'exercise.id' => 'required|numeric|exists:exercises,id',
-        'exercise.name' => 'required|string|max:255',
-        'exercise.description' => 'nullable|string|max:1000',
-        'exercise.workout_id' => 'required|numeric|exists:workouts,id',
-    ];
 
     public function render()
     {
@@ -66,19 +59,44 @@ final class Update extends Component
                 id: $this->exercise['id'],
                 name: $this->exercise['name'],
                 description: $this->exercise['description'],
-                workoutId: (int) $this->exercise['workout_id'],
+                workoutId: (int)$this->exercise['workout_id'],
                 userId: auth()->id(),
             );
 
             $useCase->handle($command);
 
             redirect(route('exercise'))->success(
-                'Entrenamiento actualizado correctamente'
+                'Ejercicio actualizado correctamente'
             );
+        } catch (ExerciseAlreadyExists $e) {
+            $this->error('Ya existe un ejercicio con ese nombre');
         } catch (Exception $e) {
-            $this->error('Error al crear el entrenamiento', [
+            $this->error('Error al crear el ejercicio', [
                 'error' => $e->getMessage(),
             ]);
         }
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'exercise.id' => 'required|numeric|exists:exercises,id',
+            'exercise.name' => 'required|string|max:255',
+            'exercise.description' => 'nullable|string|max:1000',
+            'exercise.workout_id' => 'required|exists:workouts,id',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'exercise.name.required' => 'El nombre es requerido',
+            'exercise.name.string' => 'El nombre debe ser una cadena de texto',
+            'exercise.name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'exercise.description.string' => 'La descripción debe ser una cadena de texto',
+            'exercise.description.max' => 'La descripción no debe exceder los 1000 caracteres',
+            'exercise.workout_id.required' => 'Debes seleccionar un entrenamiento',
+            'exercise.workout_id.exists' => 'El entrenamiento no existe',
+        ];
     }
 }

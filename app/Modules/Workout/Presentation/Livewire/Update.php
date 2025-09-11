@@ -8,6 +8,7 @@ use App\Modules\Workout\Application\Commands\GetWorkoutDetailsCommand;
 use App\Modules\Workout\Application\Commands\UpdateWorkoutCommand;
 use App\Modules\Workout\Application\UseCases\GetWorkoutDetailsUseCase;
 use App\Modules\Workout\Application\UseCases\UpdateWorkoutUseCase;
+use App\Modules\Workout\Domain\Exceptions\WorkoutAlreadyExists;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -19,11 +20,6 @@ final class Update extends Component
     public int $workoutId;
     public string $name;
     public ?string $description = null;
-
-    protected array $rules = [
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string|max:1000',
-    ];
 
     public function render()
     {
@@ -55,9 +51,32 @@ final class Update extends Component
 
             $useCase->handle($command);
 
-
+            redirect(route('workout'))->success(
+                'Entrenamiento actualizado correctamente',
+            );
+        } catch (WorkoutAlreadyExists $e) {
+            $this->error('Ya existe un entrenamiento con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al actualizar el entrenamiento');
         }
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es obligatorio',
+            'name.string' => 'El nombre debe ser una cadena de texto',
+            'name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'description.string' => 'La descripción debe ser una cadena de texto',
+            'description.max' => 'La descripción no debe exceder los 1000 caracteres',
+        ];
     }
 }

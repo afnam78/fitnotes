@@ -6,9 +6,11 @@
         {{$slot}}
     </header>
     <section>
-        <p class="font-bold text-lg">
-            {{$value}}
-        </p>
+        @if(isset($value))
+            <p class="font-bold text-lg">
+                {{$value}}
+            </p>
+        @endif
         <p class="text-sm">
             {{$description}}
         </p>

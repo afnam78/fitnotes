@@ -6,13 +6,24 @@ namespace App\Modules\Exercise\Domain\Entities;
 
 final class Exercise
 {
+    private readonly int $id;
+    private string $name;
+    private int $workoutId;
+    private ?string $description = null;
+
     public function __construct(
-        private readonly int $id,
-        private string       $name,
-        private int $workoutId,
-        private ?string      $description = null,
+        int     $id,
+        string  $name,
+        int     $workoutId,
+        ?string $description = null,
     ) {
+        $this->id = $id;
+        $this->setName($name);
+        $this->workoutId = $workoutId;
+        $this->description = $description;
     }
+
+
 
     public function id(): int
     {
@@ -36,7 +47,11 @@ final class Exercise
 
     public function setName(string $name): void
     {
-        $this->name = $name;
+        $this->name = str($name)
+            ->trim()
+            ->ascii()
+            ->ucfirst()
+            ->toString();
     }
 
     public function setDescription(?string $description): void

@@ -26,6 +26,10 @@ final readonly class UpdateExerciseUseCase
         $exercise->setDescription($command->description);
         $exercise->setWorkoutId($command->workoutId);
 
+        $exercises = $this->repository->getAllByUserId($command->userId);
+
+        $exercises->validateIfUnique($exercise);
+
         $this->repository->update($exercise);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Exercise\Infrastructure\Repositories;
 
+use App\Modules\Exercise\Domain\Aggregates\ExerciseList;
 use App\Modules\Exercise\Domain\Contracts\ExerciseRepositoryInterface;
 use App\Modules\Exercise\Domain\Entities\Exercise;
 use App\Modules\Shared\Domain\Helpers\LogHelper;
@@ -54,6 +55,33 @@ final class ExerciseRepository implements ExerciseRepositoryInterface
             ));
             throw $e;
         }
+    }
+
+    public function findByName(string $name): ?Exercise
+    {
+        $exercise = \App\Modules\Exercise\Infrastructure\Database\Models\Exercise::where('name', $name)
+            ->first();
+
+        return $exercise ? new Exercise(
+            id: $exercise->id,
+            name: $exercise->name,
+            workoutId: $exercise->workout_id,
+            description: $exercise->description,
+        ) : null;
+    }
+
+    public function getAllByUserId(int $userId): ExerciseList
+    {
+        return new ExerciseList(
+            items: auth()->user()
+                ->exercises
+                ->map(fn (\App\Modules\Exercise\Infrastructure\Database\Models\Exercise $exercise) => new Exercise(
+                    id: $exercise->id,
+                    name: $exercise->name,
+                    workoutId: $exercise->workout_id,
+                    description: $exercise->description,
+                ))
+        );
     }
 
     public function findByIdAndUserId(int $exerciseId, int $userId): ?Exercise
