@@ -114,6 +114,13 @@
             locale: 'es',
             firstDay: 1,
             events: events,
+            titleFormat: {
+                year: 'numeric',
+                month: 'short',
+            },
+            buttonText: {
+                today: 'Hoy'
+            },
             showNonCurrentDates: false,
             dateClick: function (event) {
                 $wire.dispatchSelf('openCalendarModal', {date: event.dateStr});
