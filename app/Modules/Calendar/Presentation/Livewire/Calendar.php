@@ -207,6 +207,8 @@ final class Calendar extends Component
 
             $this->setWorkoutsInSelectedDate($getRegistersByDateUseCase);
             $this->setEvents($getEventsUseCase);
+            
+            $this->dispatch('workoutUpdated', $this->events);
             $this->success('Serie eliminada correctamente');
         } catch (Exception $e) {
             $this->error('Error');

@@ -12,9 +12,14 @@
     <x-modal name="showCalendarModal" size="md" :show="$errors->isNotEmpty()" focusable>
         <section class="p-4">
             <div class="flex justify-between items-center">
-                <div class="font-semibold">
+                <div class="font-semibold hidden sm:block">
                     @if($selectedDate)
                         {{str($selectedDate->isoFormat('dddd D [de] MMMM [de] YYYY'))->upper()->value()}}
+                    @endif
+                </div>
+                <div class="font-semibold block sm:hidden">
+                    @if($selectedDate)
+                        {{$selectedDate->format('d/m/Y')}}
                     @endif
                 </div>
                 <button x-on:click="$dispatch('close')">
