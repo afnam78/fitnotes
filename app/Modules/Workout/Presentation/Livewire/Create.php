@@ -6,6 +6,7 @@ namespace App\Modules\Workout\Presentation\Livewire;
 
 use App\Modules\Workout\Application\Commands\CreateWorkoutCommand;
 use App\Modules\Workout\Application\UseCases\CreateWorkoutUseCase;
+use App\Modules\Workout\Domain\Exceptions\WorkoutAlreadyExists;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -41,6 +42,8 @@ final class Create extends Component
             redirect(route('workout'))->success(
                 'Entrenamiento creado correctamente',
             );
+        } catch (WorkoutAlreadyExists $e) {
+            $this->error('Ya existe un entrenamiento con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al crear el entrenamiento');
         }

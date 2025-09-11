@@ -9,6 +9,7 @@ use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
 use App\Modules\Exercise\Application\Commands\UpdateExerciseCommand;
 use App\Modules\Exercise\Application\UseCases\GetExerciseDetailsUseCase;
 use App\Modules\Exercise\Application\UseCases\UpdateExerciseUseCase;
+use App\Modules\Exercise\Domain\Exceptions\ExerciseAlreadyExists;
 use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
 use Exception;
 use Livewire\Component;
@@ -58,7 +59,7 @@ final class Update extends Component
                 id: $this->exercise['id'],
                 name: $this->exercise['name'],
                 description: $this->exercise['description'],
-                workoutId: (int) $this->exercise['workout_id'],
+                workoutId: (int)$this->exercise['workout_id'],
                 userId: auth()->id(),
             );
 
@@ -67,6 +68,8 @@ final class Update extends Component
             redirect(route('exercise'))->success(
                 'Ejercicio actualizado correctamente'
             );
+        } catch (ExerciseAlreadyExists $e) {
+            $this->error('Ya existe un ejercicio con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al crear el ejercicio', [
                 'error' => $e->getMessage(),

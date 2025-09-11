@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Modules\Workout\Domain\Aggregates;
 
 use App\Modules\Workout\Domain\Entities\Workout;
-use Exception;
+use App\Modules\Workout\Domain\Exceptions\WorkoutAlreadyExists;
 use Illuminate\Support\Collection;
 
 final readonly class WorkoutList
@@ -20,7 +20,7 @@ final readonly class WorkoutList
         $uniqueNames = collect($this->items)->filter(fn (Workout $item) => $workout->id() !== $item->id() && $workout->name() === $item->name());
 
         if ($uniqueNames->isNotEmpty()) {
-            throw new Exception("Workout name must be unique");
+            throw new WorkoutAlreadyExists();
         }
     }
 

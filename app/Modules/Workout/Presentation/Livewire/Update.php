@@ -8,6 +8,7 @@ use App\Modules\Workout\Application\Commands\GetWorkoutDetailsCommand;
 use App\Modules\Workout\Application\Commands\UpdateWorkoutCommand;
 use App\Modules\Workout\Application\UseCases\GetWorkoutDetailsUseCase;
 use App\Modules\Workout\Application\UseCases\UpdateWorkoutUseCase;
+use App\Modules\Workout\Domain\Exceptions\WorkoutAlreadyExists;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -53,6 +54,8 @@ final class Update extends Component
             redirect(route('workout'))->success(
                 'Entrenamiento actualizado correctamente',
             );
+        } catch (WorkoutAlreadyExists $e) {
+            $this->error('Ya existe un entrenamiento con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al actualizar el entrenamiento');
         }

@@ -7,6 +7,7 @@ namespace App\Modules\Exercise\Application\UseCases;
 use App\Modules\Exercise\Application\Commands\CreateExerciseCommand;
 use App\Modules\Exercise\Domain\Contracts\ExerciseRepositoryInterface;
 use App\Modules\Exercise\Domain\Entities\Exercise;
+use App\Modules\Exercise\Domain\Exceptions\ExerciseAlreadyExists;
 use App\Modules\Workout\Domain\Contracts\WorkoutRepositoryInterface;
 use InvalidArgumentException;
 
@@ -28,6 +29,11 @@ final readonly class CreateExerciseUseCase
         }
 
         $exercise = $this->getEntity($command);
+
+        $exerciseFromDb = $this->repository->findByName($exercise->name());
+        if ($exerciseFromDb) {
+            throw new ExerciseAlreadyExists();
+        }
 
         $this->repository->create($exercise);
     }
