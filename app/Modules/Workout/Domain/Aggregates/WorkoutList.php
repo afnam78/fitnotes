@@ -17,7 +17,7 @@ final readonly class WorkoutList
 
     public function validateIsUnique(Workout $workout): void
     {
-        $uniqueNames = collect($this->items)->filter(fn (Workout $workout) => $workout->id() !== $id && $workout->name() === $name);
+        $uniqueNames = collect($this->items)->filter(fn (Workout $item) => $workout->id() !== $item->id() && $workout->name() === $item->name());
 
         if ($uniqueNames->isNotEmpty()) {
             throw new Exception("Workout name must be unique");

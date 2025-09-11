@@ -79,6 +79,16 @@ final class Calendar extends Component
     public function workoutToSet(int $selectedWorkout, GetWorkoutWithRelatedExercisesUseCase $useCase): void
     {
         try {
+            if (data_get($this->selectedWorkout, 'id') === $selectedWorkout) {
+                return;
+            }
+
+            $this->reset([
+                'selectedWorkout',
+                'selectedExercise',
+                'workoutExercises',
+            ]);
+
             $command = new GetWorkoutWithRelatedExercisesCommand(
                 workoutId: $selectedWorkout,
                 userId: auth()->id(),
