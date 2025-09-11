@@ -15,10 +15,8 @@ return new class () extends Migration {
         Schema::create('sets', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('exercise_id')->constrained()->onDelete('cascade');
-            $table->integer('order');
             $table->integer('reps');
             $table->decimal('weight')->nullable();
-            $table->integer('rir')->nullable();
             $table->timestamps();
         });
     }

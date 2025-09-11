@@ -63,7 +63,6 @@ final class LoadBackup implements ShouldQueue
                 'reps' => $dto->reps(),
                 'weight' => $dto->weight(),
                 'set_date' => $dto->date(),
-                'order' => 0
             ]);
         });
     }

@@ -39,7 +39,6 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
                                     workoutId: $set['exercise']['workout_id'],
                                     reps: $set['reps'],
                                     weight: (float) $set['weight'],
-                                    order: $set['order'],
                                 ));
 
                             return new Exercise(

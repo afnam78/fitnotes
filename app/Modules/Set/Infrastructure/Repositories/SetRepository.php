@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Modules\Set\Infrastructure\Repositories;
 
-use App\Modules\Exercise\Domain\Entities\Exercise;
 use App\Modules\Set\Domain\Contracts\SetRepositoryInterface;
 use App\Modules\Set\Domain\Entities\Set;
 use App\Modules\Shared\Domain\Helpers\LogHelper;
@@ -22,7 +21,6 @@ final class SetRepository implements SetRepositoryInterface
                     'exercise_id' => $set->exerciseId(),
                     'reps' => $set->reps(),
                     'weight' => $set->weight(),
-                    'order' => $set->order(),
                     'set_date' => $set->date()->format('Y-m-d'),
                 ]
             );
@@ -58,32 +56,6 @@ final class SetRepository implements SetRepositoryInterface
                 method: __METHOD__,
                 data: [
                     'set' => $set,
-                ]
-            ));
-
-            throw $e;
-        }
-    }
-
-
-    public function getLasOrder(Exercise $exercise, Carbon $date): int
-    {
-        try {
-            $order = \App\Modules\Exercise\Infrastructure\Database\Models\Exercise::with('sets')
-                ->find($exercise->id())
-                ->sets()
-                ->where(fn ($query) => $query->where('set_date', $date->format('Y-m-d')))
-                ->max('order');
-
-            return (null === $order ? 0 : $order) + 1;
-        } catch (Exception $e) {
-            Log::error($e->getMessage(), LogHelper::body(
-                exception: $e,
-                class: __CLASS__,
-                method: __METHOD__,
-                data: [
-                    'exercise' => $exercise,
-                    'date' => $date->format('Y-m-d'),
                 ]
             ));
 
@@ -128,7 +100,6 @@ final class SetRepository implements SetRepositoryInterface
                 exerciseId: $data->exercise_id,
                 reps: $data->reps,
                 weight: (float) $data->weight,
-                order: $data->order,
                 date: Carbon::parse($data->set_date),
             );
         } catch (Exception $e) {

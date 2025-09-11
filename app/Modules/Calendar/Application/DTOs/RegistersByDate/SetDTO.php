@@ -12,7 +12,6 @@ final class SetDTO
         public int   $id,
         public int   $reps,
         public float $weight,
-        public int   $order,
     ) {
     }
 
@@ -22,7 +21,6 @@ final class SetDTO
             id: $set->id(),
             reps: $set->reps(),
             weight: $set->weight(),
-            order: $set->order(),
         );
     }
 
@@ -32,7 +30,6 @@ final class SetDTO
             'id' => $this->id,
             'reps' => $this->reps,
             'weight' => $this->weight,
-            'order' => $this->order,
         ];
     }
 }

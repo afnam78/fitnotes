@@ -12,7 +12,6 @@ final class Set
         private int   $workoutId,
         private int   $reps,
         private float $weight,
-        private int   $order,
     ) {
     }
 
@@ -39,10 +38,5 @@ final class Set
     public function weight(): float
     {
         return $this->weight;
-    }
-
-    public function order(): int
-    {
-        return $this->order;
     }
 }
