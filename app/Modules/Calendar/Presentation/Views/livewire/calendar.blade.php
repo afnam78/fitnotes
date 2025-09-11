@@ -89,7 +89,7 @@
                     </section>
                 </div>
             </div>
-            @include('calendar::partials.workouts')
+            @includeWhen(!empty($workoutsInSelectedDate), 'calendar::partials.workouts')
         </section>
     </x-modal>
 </div>

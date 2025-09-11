@@ -37,6 +37,7 @@ final readonly class CreateSetUseCase
         $lastOrder = $this->setRepository->getLasOrder($exercise, $command->date);
 
         return new Set(
+            id: 0,
             exerciseId: $command->exerciseId,
             reps: $command->reps,
             weight: $command->weight,
