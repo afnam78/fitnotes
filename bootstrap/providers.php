@@ -10,4 +10,5 @@ return [
     App\Modules\Calendar\Infrastructure\Providers\ModuleProvider::class,
     App\Modules\Set\Infrastructure\Providers\ModuleProvider::class,
     App\Modules\Shared\Infrastructure\Providers\ModuleProvider::class,
+    App\Modules\Backup\Infrastructure\Providers\ModuleProvider::class,
 ];
