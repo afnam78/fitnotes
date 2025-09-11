@@ -11,6 +11,12 @@ use Illuminate\Support\Carbon;
 interface SetRepositoryInterface
 {
     public function create(Set $set): void;
+    public function update(Set $set): void;
+
 
     public function getLasOrder(Exercise $exercise, Carbon $date): int;
+
+    public function findByIdAndUserId(int $id, int $userId): ?Set;
+
+    public function delete(Set $set): void;
 }

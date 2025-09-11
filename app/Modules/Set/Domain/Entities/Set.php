@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Set\Domain\Entities;
 
+use App\Modules\Shared\Domain\Exceptions\NegativeNumber;
 use Illuminate\Support\Carbon;
 
 final class Set
@@ -19,12 +20,14 @@ final class Set
 
 
     public function __construct(
+        int   $id,
         int   $exerciseId,
         int   $reps,
         float $weight,
         int   $order,
         Carbon $date,
     ) {
+        $this->id = $id;
         $this->exerciseId = $exerciseId;
         $this->reps = $reps;
         $this->weight = $weight;
@@ -61,5 +64,29 @@ final class Set
     public function date(): Carbon
     {
         return $this->date;
+    }
+
+    public function setDate(Carbon $date): void
+    {
+        $this->date = $date;
+    }
+
+
+    public function setReps(int $reps): void
+    {
+        if ($reps < 0) {
+            throw new NegativeNumber();
+        }
+
+        $this->reps = $reps;
+    }
+
+    public function setWeight(float $weight): void
+    {
+        if ($weight < 0) {
+            throw new NegativeNumber();
+        }
+
+        $this->weight = $weight;
     }
 }
