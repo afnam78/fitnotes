@@ -20,7 +20,8 @@ final readonly class GetDashboardKPIUseCase
         return new GetDashboardKPIResult(
             workoutsToday: $this->dashboardRepository->getWorkoutsCountToday($command->userId),
             currentWeekSets: $this->dashboardRepository->getCurrentWeekSetsCount($command->userId),
-            weeklyVolume: $this->dashboardRepository->getWeeklyVolume($command->userId)
+            weeklyVolume: $this->dashboardRepository->getWeeklyVolume($command->userId),
+            getWeeklyRecordsExercises: $this->dashboardRepository->getWeeklyRecordsExercises($command->userId)
         );
     }
 }

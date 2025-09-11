@@ -56,7 +56,7 @@
                                         <button x-show="edit" @click="edit=false, $wire.updateSet({{$serie['id']}}, weightToSet, repsToSet)" class="bg-primary text-white rounded p-1">
                                             <x-check></x-check>
                                         </button>
-                                        <button x-show="!edit" wire:click="deleteSet({{$serie['id']}})" class="bg-red-500 text-white rounded p-1">
+                                        <button x-show="!edit" wire:confirm="¿Estás seguro de realizar esta acción?" wire:click="deleteSet({{$serie['id']}})" class="bg-red-500 text-white rounded p-1">
                                             <x-trash></x-trash>
                                         </button>
                                     </td>

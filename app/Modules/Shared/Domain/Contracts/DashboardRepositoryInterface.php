@@ -11,4 +11,6 @@ interface DashboardRepositoryInterface
     public function getCurrentWeekSetsCount(int $userId): int;
 
     public function getWeeklyVolume(int $userId): float;
+
+    public function getWeeklyRecordsExercises(int $userId): array;
 }
