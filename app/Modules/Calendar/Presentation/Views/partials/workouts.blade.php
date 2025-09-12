@@ -6,9 +6,9 @@
                     {{$workouts['name']}}
                 </div>
 
-                @foreach($workouts['exercises'] as $exercise)
+                @foreach($workouts['exercises'] as $name => $exercise)
                     <div class="font-medium border-b bg-gray-400 text-white p-2 text-center">
-                        {{$exercise['name']}}
+                        {{$name}}
                     </div>
                     <div class="relative overflow-x-auto">
                         <table class="w-full text-sm text-left table-fixed">

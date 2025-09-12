@@ -7,9 +7,11 @@ namespace App\Modules\Calendar\Infrastructure\Repositories;
 use App\Modules\Calendar\Domain\Contracts\WorkoutRepositoryInterface;
 use App\Modules\Calendar\Domain\ValueObjects\Exercise;
 use App\Modules\Calendar\Domain\ValueObjects\Workout;
+use App\Modules\Set\Infrastructure\Database\Models\Set;
 use App\Modules\Shared\Domain\Helpers\LogHelper;
 use Exception;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,68 +20,31 @@ final class WorkoutRepository implements WorkoutRepositoryInterface
     public function getRegistersByDate(int $userId, Carbon $date): array
     {
         try {
-            $workouts = DB::table('workouts')
-                ->join('exercises', 'exercises.workout_id', '=', 'workouts.id')
-                ->join('sets', 'sets.exercise_id', '=', 'exercises.id')
-                ->whereDate('sets.set_date', $date->format('Y-m-d'))
-                ->where('workouts.user_id', $userId)
-                ->selectRaw('
-                workouts.name as workout_name,
-                JSON_ARRAYAGG(
-                    JSON_OBJECT(
-                        "exercise_name", exercises.name,
-                        "sets", (
-                            SELECT JSON_ARRAYAGG(
-                                JSON_OBJECT(
-                                    "id", s.id,
-                                    "exercise_id", s.exercise_id,
-                                    "workout_id", exercises.workout_id,
-                                    "reps", s.reps,
-                                    "weight", s.weight
-                                )
-                            )
-                            FROM sets s
-                            WHERE s.exercise_id = exercises.id
-                              AND DATE(s.set_date) = ?
-                        )
-                    )
-                ) as exercises
-            ', [$date->format('Y-m-d')])
-                ->groupBy('workouts.id', 'workouts.name')
-                ->get();
+            $result = Set::with('exercise.workout')
+                ->where('set_date', $date->format('Y-m-d'))->whereHas('exercise.workout', function ($query) use ($userId): void {
+                    $query->where('user_id', $userId);
+                })
+                ->get()
+                ->groupBy('exercise.workout.name')
+                ->map(fn ($setsByWorkout) => $setsByWorkout->groupBy('exercise.name'));
 
-            return $workouts->map(function ($row) {
-                $exercises = collect(json_decode($row->exercises, true))
-                    ->map(fn ($exercise) => new Exercise(
-                        name: $exercise['exercise_name'],
-                        sets: collect($exercise['sets'])->map(fn ($set) => new \App\Modules\Calendar\Domain\ValueObjects\Set(
-                            id: $set['id'],
-                            exerciseId: $set['exercise_id'],
-                            workoutId: $set['workout_id'],
-                            reps: $set['reps'],
-                            weight: (float) $set['weight'],
-                        ))->toArray()
-                    ));
-
-                return new Workout(
-                    name: $row->workout_name,
-                    exercises: $exercises->toArray()
-                );
-            })->toArray();
+            return $result
+                ->map(function (Collection $workout, string $workoutName) {
+                    $exercises = $workout->map(function (Collection $exercise, string $exerciseName) {
+                        $sets = $exercise->map(fn (Set $set) => new \App\Modules\Calendar\Domain\ValueObjects\Set(id: $set['id'], exerciseId: $set['exercise_id'], workoutId: $set['exercise']['workout_id'], reps: $set['reps'], weight: (float)$set['weight'], ));
+                        return new Exercise(name: $exerciseName, sets: $sets->toArray());
+                    });
+                    return new Workout(name: $workoutName, exercises: $exercises->toArray());
+                })
+                ->values()
+                ->toArray();
 
         } catch (Exception $e) {
-            Log::error($e->getMessage(), LogHelper::body(
-                exception: $e,
-                class: __CLASS__,
-                method: __METHOD__,
-                data: [
-                    'userId' => $userId,
-                    'date' => $date->format('Y-m-d'),
-                ]
-            ));
+            Log::error($e->getMessage(), LogHelper::body(exception: $e, class: __CLASS__, method: __METHOD__, data: ['userId' => $userId, 'date' => $date->format('Y-m-d'),]));
             throw $e;
         }
     }
+
     public function getWorkoutWithRelatedExercises(int $workoutId, int $userId): array
     {
         try {
