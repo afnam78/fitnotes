@@ -4,9 +4,9 @@
             <h2 class="font-semibold text-xl  leading-tight">
                 {{ __('¡Hola, '. auth()->user()->name . '!') }}
             </h2>
-{{--            <x-anchor href="{{route('backup.import')}}">--}}
-{{--                Backup Import--}}
-{{--            </x-anchor>--}}
+            <x-anchor href="{{route('backup.import')}}">
+                Backup Import
+            </x-anchor>
         </div>
     </x-slot>
     <div>
