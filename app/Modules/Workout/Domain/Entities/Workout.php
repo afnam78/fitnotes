@@ -18,7 +18,7 @@ final class Workout
         ?string $description,
     ) {
         $this->id = $id;
-        $this->name = $name;
+        $this->setName($name);
         $this->userId = $userId;
         $this->description = $description;
     }
@@ -45,7 +45,11 @@ final class Workout
 
     public function setName(string $value): void
     {
-        $this->name = $value;
+        $this->name = str($value)
+            ->trim()
+            ->ascii()
+            ->ucfirst()
+            ->toString();
     }
 
     public function setDescription(?string $value): void

@@ -18,19 +18,22 @@ final class EventRepository implements EventRepositoryInterface
     {
         try {
             return Set::query()
-                ->with('exercise.workout')
-                ->whereHas('exercise.workout', function ($query): void {
-                    $query->where('user_id', auth()->id());
-                })
-                ->distinct()
+                ->join('exercises', 'exercises.id', '=', 'sets.exercise_id')
+                ->join('workouts', 'workouts.id', '=', 'exercises.workout_id')
+                ->where('workouts.user_id', $userId)
+                ->selectRaw('
+                MIN(sets.id) as id,
+                sets.set_date,
+                workouts.name as workout_name,
+                DATE_FORMAT(sets.set_date, "%d/%m/%y") as formatted_date
+            ')
+                ->groupBy('formatted_date', 'workout_name', 'sets.set_date')
                 ->get()
-                ->map(fn (Set $item) => new Event(
+                ->map(fn ($item) => new Event(
                     start: Carbon::parse($item->set_date),
-                    title: $item->exercise->workout->name,
+                    title: $item->workout_name,
                     id: $item->id,
                 ))
-                ->unique(fn (Event $item) => $item->start()->format('d/m/y') . $item->title())
-                ->values()
                 ->map(fn ($item) => (object) $item)
                 ->toArray();
         } catch (Exception $e) {
@@ -42,6 +45,5 @@ final class EventRepository implements EventRepositoryInterface
             ));
             throw $e;
         }
-
     }
 }

@@ -7,14 +7,18 @@ namespace App\Modules\Shared\Presentation\Livewire;
 use App\Modules\Shared\Application\Commands\GetDashboardKPICommand;
 use App\Modules\Shared\Application\UseCases\GetDashboardKPIUseCase;
 use Livewire\Component;
+use Masmerise\Toaster\Toastable;
 
 final class Dashboard extends Component
 {
+    use Toastable;
     public array $motivationalMessage;
     public int $workoutsToday = 0;
     public int $setsCurrentWeek = 0;
 
     public float $weeklyVolume = 0.0;
+
+    public array $getWeeklyRecordsExercises = [];
 
     public function render()
     {
@@ -31,6 +35,7 @@ final class Dashboard extends Component
         $this->workoutsToday = $result->workoutsToday;
         $this->setsCurrentWeek = $result->currentWeekSets;
         $this->weeklyVolume = $result->weeklyVolume;
+        $this->getWeeklyRecordsExercises = $result->getWeeklyRecordsExercises;
     }
 
     public function motivationalMessages(): array
@@ -41,14 +46,6 @@ final class Dashboard extends Component
                 "author" => "Mahatma Gandhi"
             ],
             [
-                "sentence" => "La diferencia entre lo imposible y lo posible reside en la determinación de una persona.",
-                "author" => "Tommy Lasorda"
-            ],
-            [
-                "sentence" => "El éxito no es definitivo, el fracaso no es fatal: es el coraje para continuar lo que cuenta.",
-                "author" => "Winston Churchill"
-            ],
-            [
                 "sentence" => "El dolor es temporal. El abandono es para siempre.",
                 "author" => "Lance Armstrong"
             ],
@@ -56,20 +53,10 @@ final class Dashboard extends Component
                 "sentence" => "La única forma de hacer un gran trabajo es amar lo que haces.",
                 "author" => "Steve Jobs"
             ],
-
-            [
-                "sentence" => "El camino hacia el éxito y el camino hacia el fracaso son casi exactamente los mismos.",
-                "author" => "Colin R. Davis"
-            ],
-            [
-                "sentence" => "La fuerza no viene de ganar. Tus luchas desarrollan tus fortalezas. Cuando pasas por dificultades y decides no rendirte, eso es la fuerza.",
-                "author" => "Arnold Schwarzenegger"
-            ],
             [
                 "sentence" => "La disciplina es el puente entre las metas y los logros.",
                 "author" => "Jim Rohn"
             ],
-
         ];
     }
 }

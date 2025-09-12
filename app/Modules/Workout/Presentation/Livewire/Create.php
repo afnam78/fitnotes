@@ -6,6 +6,7 @@ namespace App\Modules\Workout\Presentation\Livewire;
 
 use App\Modules\Workout\Application\Commands\CreateWorkoutCommand;
 use App\Modules\Workout\Application\UseCases\CreateWorkoutUseCase;
+use App\Modules\Workout\Domain\Exceptions\WorkoutAlreadyExists;
 use Exception;
 use Livewire\Component;
 use Masmerise\Toaster\Toastable;
@@ -18,10 +19,6 @@ final class Create extends Component
     public ?string $description = null;
 
 
-    protected array $rules = [
-        'name' => 'required|string|max:255',
-        'description' => 'nullable|string|max:1000',
-    ];
 
     public function render()
     {
@@ -31,9 +28,9 @@ final class Create extends Component
     public function create(CreateWorkoutUseCase $useCase): void
     {
 
-        try {
-            $this->validate();
+        $this->validate();
 
+        try {
             $command = new CreateWorkoutCommand(
                 name: $this->name,
                 userId: auth()->id(),
@@ -45,8 +42,29 @@ final class Create extends Component
             redirect(route('workout'))->success(
                 'Entrenamiento creado correctamente',
             );
+        } catch (WorkoutAlreadyExists $e) {
+            $this->error('Ya existe un entrenamiento con ese nombre');
         } catch (Exception $e) {
             $this->error('Error al crear el entrenamiento');
         }
+    }
+
+    protected function rules(): array
+    {
+        return [
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
+        ];
+    }
+
+    protected function messages(): array
+    {
+        return [
+            'name.required' => 'El nombre es obligatorio',
+            'name.string' => 'El nombre debe ser una cadena de texto',
+            'name.max' => 'El nombre no debe exceder los 255 caracteres',
+            'description.string' => 'La descripción debe ser una cadena de texto',
+            'description.max' => 'La descripción no debe exceder los 1000 caracteres',
+        ];
     }
 }
