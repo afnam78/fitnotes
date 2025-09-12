@@ -14,8 +14,6 @@ final class Set
     private int $reps;
     private float $weight;
 
-    private int $order;
-
     private Carbon $date;
 
 
@@ -24,14 +22,12 @@ final class Set
         int   $exerciseId,
         int   $reps,
         float $weight,
-        int   $order,
         Carbon $date,
     ) {
         $this->id = $id;
         $this->exerciseId = $exerciseId;
         $this->reps = $reps;
         $this->weight = $weight;
-        $this->order = $order;
         $this->date = $date;
     }
 
@@ -54,11 +50,6 @@ final class Set
     public function weight(): float
     {
         return $this->weight;
-    }
-
-    public function order(): int
-    {
-        return $this->order;
     }
 
     public function date(): Carbon
