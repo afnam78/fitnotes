@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Modules\Backup\Infrastructure\Jobs;
 
+use App\Models\User;
 use App\Modules\Backup\Domain\ValueObject\BackupImportItemDTO;
 use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
 use App\Modules\Set\Infrastructure\Database\Models\Set;
@@ -42,6 +43,10 @@ final class LoadBackup implements ShouldQueue
             return;
         }
 
+        User::with('workouts')
+            ->findOrFail($this->userId)
+            ->workouts()
+            ->delete();
 
         collect($this->data)->each(function (array $item): void {
             $dto = BackupImportItemDTO::fromArray($item);

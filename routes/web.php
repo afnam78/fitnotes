@@ -22,8 +22,8 @@ Route::get('calendar', Calendar::class)
     ->name('calendar')
     ->middleware('auth');
 
-Route::get('backup-import', App\Modules\Backup\Presentation\Livewire\BackupImport::class)
-    ->name('backup.import')
-    ->middleware('auth');
+//Route::get('backup-import', App\Modules\Backup\Presentation\Livewire\BackupImport::class)
+//    ->name('backup.import')
+//    ->middleware('auth');
 
 require __DIR__ . '/auth.php';
