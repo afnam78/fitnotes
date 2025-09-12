@@ -20,6 +20,8 @@ final class Dashboard extends Component
 
     public array $getWeeklyRecordsExercises = [];
 
+    public array $lineChart = [];
+
     public function render()
     {
         return view('shared::livewire.dashboard');
@@ -36,6 +38,7 @@ final class Dashboard extends Component
         $this->setsCurrentWeek = $result->currentWeekSets;
         $this->weeklyVolume = $result->weeklyVolume;
         $this->getWeeklyRecordsExercises = $result->getWeeklyRecordsExercises;
+        $this->lineChart = $result->lineChartExerciseProgress;
     }
 
     public function motivationalMessages(): array

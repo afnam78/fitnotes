@@ -12,6 +12,14 @@
     <div>
 
         <div class="space-y-4">
+            @if(!empty($lineChart))
+                <div class="border p-2 rounded-lg">
+                    <h3 class="font-semibold text-center">
+                        {{$lineChart['title']}}
+                    </h3>
+                    <canvas id="myProgressChart" ></canvas>
+                </div>
+            @endif
 
             @if( auth()->user()->workouts->isEmpty() || auth()->user()->exercises->isEmpty())
 
@@ -95,3 +103,58 @@
         </div>
     </div>
 </div>
+@script
+<script type="text/javascript">
+    document.addEventListener('livewire:initialized', function () {
+        let data = @this.lineChart;
+
+        if(data.length === 0) return;
+
+        const ctx = document.getElementById('myProgressChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data.labels, // Fechas de los récords
+                datasets: [{
+                    label: 'Peso (Kg)',
+                    data: data.dataPoints, // Pesos de los récords
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }],
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            title: {
+                                display: true,
+                                text: 'Peso (Kg)'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Fecha'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Press de banca',
+                            position: 'top'
+                        }
+                    }
+                }
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
+    })
+</script>
+@endscript

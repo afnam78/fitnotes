@@ -11,6 +11,7 @@ final class GetDashboardKPIResult
         public int   $currentWeekSets,
         public float $weeklyVolume,
         public array $getWeeklyRecordsExercises,
+        public array $lineChartExerciseProgress,
     ) {
     }
 }

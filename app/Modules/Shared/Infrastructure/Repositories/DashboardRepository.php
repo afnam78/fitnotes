@@ -11,6 +11,8 @@ use App\Modules\Shared\Domain\Helpers\LogHelper;
 use App\Modules\Workout\Infrastructure\Database\Models\Workout;
 use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 final class DashboardRepository implements DashboardRepositoryInterface
@@ -138,6 +140,28 @@ final class DashboardRepository implements DashboardRepositoryInterface
         $result = Exercise::whereIn('id', $exercisesWithRecords->values())->pluck('name')->toArray();
 
         return array_slice($result, 0, 3);
+    }
+
+    public function getExerciseLineChartProgress(Exercise $exercise): array
+    {
+        $records = Set::query()
+            ->select(
+                DB::raw('MAX(weight) as max_weight'),
+                'set_date',
+            )
+            ->whereBetween('set_date', [Carbon::now()->setMonths(6)->format('Y-m-d'), Carbon::now()->format('Y-m-d')])
+            ->where('exercise_id', $exercise->id)
+            ->groupBy('set_date')
+            ->get();
+
+        $labels = $records->pluck('set_date')->map(fn ($date) => Carbon::parse($date)->format('d/m/Y'));
+        $dataPoints = $records->pluck('max_weight');
+
+        return [
+            'labels' => $labels,
+            'dataPoints' => $dataPoints,
+            'title' => $exercise->name,
+        ];
     }
 
 

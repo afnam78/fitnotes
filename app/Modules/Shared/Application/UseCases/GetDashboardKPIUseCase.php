@@ -17,11 +17,14 @@ final readonly class GetDashboardKPIUseCase
 
     public function handle(GetDashboardKPICommand $command): GetDashboardKPIResult
     {
+        // Get random exercise id from user
+        $exercise = auth()->user()->exercises()->inRandomOrder()->first();
         return new GetDashboardKPIResult(
             workoutsToday: $this->dashboardRepository->getWorkoutsCountToday($command->userId),
             currentWeekSets: $this->dashboardRepository->getCurrentWeekSetsCount($command->userId),
             weeklyVolume: $this->dashboardRepository->getWeeklyVolume($command->userId),
-            getWeeklyRecordsExercises: $this->dashboardRepository->getWeeklyRecordsExercises($command->userId)
+            getWeeklyRecordsExercises: $this->dashboardRepository->getWeeklyRecordsExercises($command->userId),
+            lineChartExerciseProgress: $exercise ? $this->dashboardRepository->getExerciseLineChartProgress($exercise) : [],
         );
     }
 }
