@@ -58,7 +58,14 @@
                            </button>
                        </th>
                        <td class="px-6 py-4">
-                           {{$item->exercise_name}}
+                       <div class="flex gap-1 items-center">
+                           <button class="p-1 rounded-md @if($item->favourite) text-yellow-400 @endif "                                    wire:click="markAsFavourite({{$item->exercise_id}})">
+                               <x-star></x-star>
+                           </button>
+                           <p>
+                               {{$item->exercise_name}}
+                           </p>
+                       </div>
                        </td>
                        <td class="px-6 py-4">
                            {{$item->workout->name}}

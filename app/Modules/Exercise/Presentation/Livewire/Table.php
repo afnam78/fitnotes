@@ -7,6 +7,7 @@ namespace App\Modules\Exercise\Presentation\Livewire;
 use App\Modules\Exercise\Application\Commands\DeleteExerciseCommand;
 use App\Modules\Exercise\Application\Commands\GetUserWorkoutsCommand;
 use App\Modules\Exercise\Application\UseCases\DeleteExerciseUseCase;
+use App\Modules\Exercise\Infrastructure\Database\Models\Exercise;
 use App\Modules\Workout\Application\UseCases\GetUserWorkoutsUseCase;
 use Exception;
 use Livewire\Component;
@@ -32,6 +33,17 @@ final class Table extends Component
                 ->when($this->selectedWorkout, fn ($query) => $query->where('exercises.workout_id', $this->selectedWorkout))
                 ->paginate(10)
         ]);
+    }
+
+    public function markAsFavourite(int $exerciseId): void
+    {
+        auth()->user()->exercises()->update(['favourite' => false]);
+
+        $exercise = Exercise::find($exerciseId);
+        $exercise->favourite = ! $exercise->favourite;
+        $exercise->save();
+
+        $this->success('Ejercicio marcado como favorito');
     }
 
     public function mount(GetUserWorkoutsUseCase $useCase): void

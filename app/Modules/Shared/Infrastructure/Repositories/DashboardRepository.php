@@ -144,18 +144,36 @@ final class DashboardRepository implements DashboardRepositoryInterface
 
     public function getExerciseLineChartProgress(Exercise $exercise): array
     {
+        $startDate = Carbon::now()->subMonths(6)->toDateString();
+        $endDate = Carbon::now()->toDateString();
+
         $records = Set::query()
-            ->select(
-                DB::raw('MAX(weight) as max_weight'),
-                'set_date',
-            )
-            ->whereBetween('set_date', [Carbon::now()->setMonths(6)->format('Y-m-d'), Carbon::now()->format('Y-m-d')])
-            ->where('exercise_id', $exercise->id)
-            ->groupBy('set_date')
+            ->select('s.set_date', 's.weight', 's.reps')
+            ->from('sets as s')
+            ->join(DB::raw('(
+            SELECT set_date, MAX(weight) as max_weight
+            FROM sets
+            WHERE exercise_id = ' . $exercise->id . '
+              AND set_date BETWEEN "' . $startDate . '" AND "' . $endDate . '"
+            GROUP BY set_date
+        ) as m'), function ($join): void {
+                $join->on('s.set_date', '=', 'm.set_date')
+                    ->on('s.weight', '=', 'm.max_weight');
+            })
+            ->where('s.exercise_id', $exercise->id)
+            ->whereBetween('s.set_date', [$startDate, $endDate])
+            ->orderBy('s.set_date')
             ->get();
 
-        $labels = $records->pluck('set_date')->map(fn ($date) => Carbon::parse($date)->format('d/m/Y'));
-        $dataPoints = $records->pluck('max_weight');
+        $dataPoints = $records->map(
+            fn ($record) =>
+        round($record->weight * (1 + ($record->reps / 30)), 2)
+        );
+
+        $labels = $records->pluck('set_date')->map(
+            fn ($date) =>
+        Carbon::parse($date)->format('d/m/Y')
+        );
 
         return [
             'labels' => $labels,

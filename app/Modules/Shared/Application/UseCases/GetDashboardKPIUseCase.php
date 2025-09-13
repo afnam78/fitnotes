@@ -17,8 +17,8 @@ final readonly class GetDashboardKPIUseCase
 
     public function handle(GetDashboardKPICommand $command): GetDashboardKPIResult
     {
-        // Get random exercise id from user
-        $exercise = auth()->user()->exercises()->inRandomOrder()->first();
+        $exercise = auth()->user()->exercises()->where(fn ($query) => $query->where('favourite', 1))->first();
+
         return new GetDashboardKPIResult(
             workoutsToday: $this->dashboardRepository->getWorkoutsCountToday($command->userId),
             currentWeekSets: $this->dashboardRepository->getCurrentWeekSetsCount($command->userId),
