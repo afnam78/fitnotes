@@ -109,7 +109,7 @@
         let data = @this.lineChart;
 
         if(data.length === 0) return;
-
+ 
         const ctx = document.getElementById('myProgressChart').getContext('2d');
         let chart = new Chart(ctx, {
             type: 'line',
