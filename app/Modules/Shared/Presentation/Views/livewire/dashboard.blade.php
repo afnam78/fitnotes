@@ -116,7 +116,7 @@
             data: {
                 labels: data.labels, // Fechas de los récords
                 datasets: [{
-                    label: 'Peso (Kg)',
+                    label: '1RM Estimado (KG)',
                     data: data.dataPoints, // Pesos de los récords
                     borderColor: 'rgb(75, 192, 192)',
                     tension: 0.1
